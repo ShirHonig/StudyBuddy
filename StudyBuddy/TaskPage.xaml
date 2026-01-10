@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.TasksPage"
+             Title="TasksPage">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <Button Text="חזור למסך הבית" 
+                Clicked="OnBackClicked"
+                HorizontalOptions="Start" 
+                BackgroundColor="Gray"
+                TextColor="White"
+                HeightRequest="40" />
+
+        <Label Text="המשימות שלי"
+               FontSize="30"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
+
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+            <Entry x:Name="TaskEntry" 
+                   Placeholder="כתוב משימה חדשה..." 
+                   WidthRequest="200" />
+
+            <Button Text="הוסף" 
+                    Clicked="OnAddTaskClicked" 
+                    BackgroundColor="#512BD4" 
+                    TextColor="White"/>
+        </HorizontalStackLayout>
+
+        <CollectionView x:Name="TasksListView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,5" Padding="10" BorderColor="Gray">
+                        <Label Text="{Binding .}" FontSize="18" />
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentPage>

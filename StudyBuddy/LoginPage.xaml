@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.LoginPage"
+             Title="LoginPage">
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Center">
+
+            <Label Text="StudyBuddy"
+               FontSize="32"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="#512BD4" />
+
+            <Label Text="ללמוד חכם יותר, ביחד."
+               FontSize="18"
+               HorizontalOptions="Center"
+               TextColor="Gray" />
+
+            <BoxView HeightRequest="20" Color="Transparent"/>
+
+            <Entry Placeholder="שם משתמש"
+               FontSize="18" />
+
+            <Entry Placeholder="סיסמה"
+               IsPassword="True"
+               FontSize="18" />
+
+            <Button Text="התחברות"
+                Clicked="OnLoginClicked"
+                BackgroundColor="#512BD4"
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="50"
+                FontSize="18"
+                FontAttributes="Bold"/>
+
+            <Button Text="אין לך חשבון? הירשם כאן"
+                BackgroundColor="Transparent"
+                TextColor="Gray"
+                FontSize="14"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

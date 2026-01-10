@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.MainPage"
+             Title="לוח בקרה אישי"
+             BackgroundColor="#F0F0F0">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Label Text="היי, תלמיד/ה!" 
+                   FontSize="24" FontAttributes="Bold" TextColor="#333"/>
+            <Label Text="הנה מה שמחכה לך היום:" 
+                   FontSize="16" TextColor="Gray"/>
+
+            <Grid RowDefinitions="150, 150" ColumnDefinitions="*, *" ColumnSpacing="15" RowSpacing="15">
+
+                <Frame Grid.Row="0" Grid.Column="0" BackgroundColor="#512BD4" CornerRadius="15" BorderColor="Transparent">
+                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label Text="📅" FontSize="40" HorizontalOptions="Center"/>
+                        <Label Text="מערכת שעות" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnScheduleClicked"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+                <Frame Grid.Row="0" Grid.Column="1" BackgroundColor="#2B72D4" CornerRadius="15" BorderColor="Transparent">
+                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label Text="📝" FontSize="40" HorizontalOptions="Center"/>
+                        <Label Text="מטלות שלי" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTasksClicked"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+                <Frame Grid.Row="1" Grid.Column="0" BackgroundColor="#D42B72" CornerRadius="15" BorderColor="Transparent">
+                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label Text="👥" FontSize="40" HorizontalOptions="Center"/>
+                        <Label Text="קבוצות לימוד" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnGroupsClicked"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+                <Frame Grid.Row="1" Grid.Column="1" BackgroundColor="Gray" CornerRadius="15" BorderColor="Transparent">
+                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label Text="⚙️" FontSize="40" HorizontalOptions="Center"/>
+                        <Label Text="הגדרות" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

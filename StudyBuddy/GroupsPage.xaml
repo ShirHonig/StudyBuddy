@@ -2,11 +2,43 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.GroupsPage"
-             Title="GroupsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="קבוצות לימוד"
+             BackgroundColor="#F0F0F0">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="קבוצות לימוד"
+                   FontSize="24" FontAttributes="Bold" TextColor="#333"
+                   HorizontalOptions="Center" />
+
+            <Entry x:Name="GroupEntry"
+                   Placeholder="שם הקבוצה"
+                   FontSize="18" />
+
+            <Button Text="צור קבוצה"
+                    Clicked="OnAddGroupClicked"
+                    BackgroundColor="#D42B72"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    FontSize="18"
+                    FontAttributes="Bold" />
+
+            <ListView x:Name="GroupsListView"
+                      HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding}" TextColor="#333" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Button Text="חזור"
+                    Clicked="OnBackClicked"
+                    BackgroundColor="Transparent"
+                    TextColor="Gray"
+                    FontSize="14" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

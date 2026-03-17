@@ -11,5 +11,7 @@ public partial class LoginPage : ContentPage
     {
         await Navigation.PushAsync(new MainPage());
     }
+    // For demonstration purposes, the login button simply navigates to the MainPage.
+
 
 }

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.AddTaskPage"
+             Title="AddTaskPage"
+             BackgroundColor="#f3f0ff"
+             FlowDirection="RightToLeft"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- ===== HEADER BAR ===== -->
+        <Grid Grid.Row="0" BackgroundColor="#9333ea" Padding="16,50,16,16"
+              ColumnDefinitions="Auto,*,Auto">
+            <Frame BackgroundColor="#7c22d4" CornerRadius="10"
+                   WidthRequest="40" HeightRequest="40"
+                   Padding="0" BorderColor="Transparent"
+                   HasShadow="False" Grid.Column="0">
+                <Label Text="📋" FontSize="18" HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Frame>
+            <Label Text="מערכת ניהול משימות" FontSize="20" FontAttributes="Bold"
+                   TextColor="White" HorizontalOptions="Center"
+                   VerticalOptions="Center" Grid.Column="1"/>
+            <Label Text="→" FontSize="26" TextColor="White"
+                   VerticalOptions="Center" Grid.Column="2">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCancelClicked"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+
+        <!-- ===== SCROLLABLE FORM ===== -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="0" Padding="0">
+
+                <BoxView BackgroundColor="#9333ea" HeightRequest="30"/>
+
+                <VerticalStackLayout Spacing="16" Padding="20,0,20,30"
+                                     BackgroundColor="#f3f0ff">
+
+                    <!-- BREADCRUMB -->
+                    <HorizontalStackLayout Spacing="6" HorizontalOptions="Center"
+                                           Margin="0,10,0,0">
+                        <Label Text="דף הבית" FontSize="13" TextColor="#9333ea"/>
+                        <Label Text="‹" FontSize="13" TextColor="#9ca3af"/>
+                        <Label Text="משימות" FontSize="13" TextColor="#9333ea"/>
+                        <Label Text="‹" FontSize="13" TextColor="#9ca3af"/>
+                        <Label x:Name="BreadcrumbLastLabel"
+                               Text="הוספת משימה חדשה" FontSize="13" TextColor="#6b7280"/>
+                    </HorizontalStackLayout>
+
+                    <!-- PAGE TITLE -->
+                    <Label x:Name="PageTitleLabel"
+                           Text="הוספת משימה חדשה"
+                           FontSize="24" FontAttributes="Bold"
+                           TextColor="#1e1b4b" HorizontalOptions="Center"/>
+                    <Label x:Name="PageSubtitleLabel"
+                           Text="מלא את הפרטים הבאים כדי להוסיף משימה לרשימת המשימות שלך"
+                           FontSize="14" TextColor="#6b7280"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+
+                    <!-- SECTION HEADER -->
+                    <Frame BackgroundColor="#9333ea" CornerRadius="12"
+                           Padding="14,10" BorderColor="Transparent"
+                           HasShadow="False" Margin="0,6,0,0">
+                        <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Label x:Name="SectionHeaderIcon"
+                                   Text="＋" FontSize="18" TextColor="White"
+                                   FontAttributes="Bold"/>
+                            <Label x:Name="SectionHeaderText"
+                                   Text="פרטי המשימה" FontSize="17"
+                                   FontAttributes="Bold" TextColor="White"/>
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                    <!-- FORM CARD -->
+                    <Frame BackgroundColor="White" CornerRadius="15"
+                           Padding="20" BorderColor="Transparent"
+                           HasShadow="False">
+                        <Frame.Shadow>
+                            <Shadow Brush="#18000000" Offset="0,3" Radius="10" Opacity="0.2"/>
+                        </Frame.Shadow>
+                        <VerticalStackLayout Spacing="18">
+
+                            <!-- TITLE FIELD -->
+                            <VerticalStackLayout Spacing="6">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Text="✏️" FontSize="14"/>
+                                    <Label Text="כותרת המשימה" FontSize="15"
+                                           FontAttributes="Bold" TextColor="#1e1b4b"/>
+                                </HorizontalStackLayout>
+                                <Frame BackgroundColor="#fafafa" CornerRadius="10"
+                                       Padding="0" BorderColor="#e5e7eb"
+                                       HasShadow="False">
+                                    <Entry x:Name="TitleEntry"
+                                           Placeholder="הזן כותרת למשימה..."
+                                           FontSize="16" BackgroundColor="Transparent"
+                                           PlaceholderColor="#9ca3af" TextColor="#1e1b4b"
+                                           HorizontalTextAlignment="Start"
+                                           Margin="14,0"/>
+                                </Frame>
+                            </VerticalStackLayout>
+
+                            <!-- CATEGORY FIELD -->
+                            <VerticalStackLayout Spacing="6">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Text="📁" FontSize="14"/>
+                                    <Label Text="קטגוריה" FontSize="15"
+                                           FontAttributes="Bold" TextColor="#1e1b4b"/>
+                                </HorizontalStackLayout>
+                                <Frame BackgroundColor="#fafafa" CornerRadius="10"
+                                       Padding="0" BorderColor="#e5e7eb"
+                                       HasShadow="False">
+                                    <Picker x:Name="CategoryPicker"
+                                            Title="בחר קטגוריה..."
+                                            FontSize="16" TextColor="#1e1b4b"
+                                            TitleColor="#9ca3af"
+                                            Margin="10,0">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                                <x:String>מתמטיקה</x:String>
+                                                <x:String>מדעי המחשב</x:String>
+                                                <x:String>היסטוריה</x:String>
+                                                <x:String>אנגלית</x:String>
+                                                <x:String>פיזיקה</x:String>
+                                                <x:String>ביולוגיה</x:String>
+                                                <x:String>כללי</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </Frame>
+                            </VerticalStackLayout>
+
+                            <!-- DATE FIELD -->
+                            <VerticalStackLayout Spacing="6">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Text="📅" FontSize="14"/>
+                                    <Label Text="תאריך יעד" FontSize="15"
+                                           FontAttributes="Bold" TextColor="#1e1b4b"/>
+                                </HorizontalStackLayout>
+                                <Frame BackgroundColor="#fafafa" CornerRadius="10"
+                                       Padding="0" BorderColor="#e5e7eb"
+                                       HasShadow="False" HeightRequest="48">
+                                    <DatePicker x:Name="DueDatePicker"
+                                                Format="dd/MM/yyyy"
+                                                FontSize="16" TextColor="#1e1b4b"
+                                                MinimumDate="01/01/2026"
+                                                Margin="10,0"
+                                                DateSelected="OnDateSelected"
+                                                VerticalOptions="Center"/>
+                                </Frame>
+                            </VerticalStackLayout>
+
+                            <!-- AUTO PRIORITY DISPLAY (appears after date is selected) -->
+                            <Frame x:Name="AutoPriorityFrame"
+                                   CornerRadius="12" Padding="12,10"
+                                   BorderColor="Transparent" HasShadow="False"
+                                   BackgroundColor="#d1fae5" IsVisible="False">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAutoPriorityTapped"/>
+                                </Frame.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                                    <Label Text="⚠️" FontSize="14" VerticalOptions="Center"/>
+                                    <Label Text="רמת עדיפות:" FontSize="14"
+                                           TextColor="#1e1b4b" VerticalOptions="Center"/>
+                                    <Label x:Name="AutoPriorityLabel"
+                                           FontSize="15" FontAttributes="Bold"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="▼" FontSize="10"
+                                           TextColor="#6b7280" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                            </Frame>
+
+                            <!-- PRIORITY PICKER (hidden by default, shown on tap) -->
+                            <VerticalStackLayout x:Name="PriorityPickerSection"
+                                                 Spacing="8" IsVisible="False">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Text="⚠️" FontSize="14"/>
+                                    <Label Text="שנה רמת עדיפות" FontSize="15"
+                                           FontAttributes="Bold" TextColor="#1e1b4b"/>
+                                </HorizontalStackLayout>
+                                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                                    <!-- High -->
+                                    <Frame x:Name="PriorityHighFrame"
+                                           BackgroundColor="#fee2e2" CornerRadius="12"
+                                           Padding="0" BorderColor="#fca5a5"
+                                           HeightRequest="50" HasShadow="False"
+                                           Grid.Column="0">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnPriorityHighClicked"/>
+                                        </Frame.GestureRecognizers>
+                                        <VerticalStackLayout VerticalOptions="Center"
+                                                             HorizontalOptions="Center" Spacing="2">
+                                            <Label Text="↑" FontSize="16"
+                                                   HorizontalOptions="Center" TextColor="#dc2626"/>
+                                            <Label Text="גבוהה" FontSize="13"
+                                                   FontAttributes="Bold" TextColor="#dc2626"
+                                                   HorizontalOptions="Center"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+
+                                    <!-- Medium -->
+                                    <Frame x:Name="PriorityMedFrame"
+                                           BackgroundColor="#fef9c3" CornerRadius="12"
+                                           Padding="0" BorderColor="#fde68a"
+                                           HeightRequest="50" HasShadow="False"
+                                           Grid.Column="1">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnPriorityMedClicked"/>
+                                        </Frame.GestureRecognizers>
+                                        <VerticalStackLayout VerticalOptions="Center"
+                                                             HorizontalOptions="Center" Spacing="2">
+                                            <Label Text="—" FontSize="16"
+                                                   HorizontalOptions="Center" TextColor="#ca8a04"/>
+                                            <Label Text="בינונית" FontSize="13"
+                                                   FontAttributes="Bold" TextColor="#ca8a04"
+                                                   HorizontalOptions="Center"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+
+                                    <!-- Low -->
+                                    <Frame x:Name="PriorityLowFrame"
+                                           BackgroundColor="#d1fae5" CornerRadius="12"
+                                           Padding="0" BorderColor="#86efac"
+                                           HeightRequest="50" HasShadow="False"
+                                           Grid.Column="2">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnPriorityLowClicked"/>
+                                        </Frame.GestureRecognizers>
+                                        <VerticalStackLayout VerticalOptions="Center"
+                                                             HorizontalOptions="Center" Spacing="2">
+                                            <Label Text="↓" FontSize="16"
+                                                   HorizontalOptions="Center" TextColor="#16a34a"/>
+                                            <Label Text="נמוכה" FontSize="13"
+                                                   FontAttributes="Bold" TextColor="#16a34a"
+                                                   HorizontalOptions="Center"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </Grid>
+                            </VerticalStackLayout>
+
+                            <!-- DESCRIPTION FIELD -->
+                            <VerticalStackLayout Spacing="6">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Text="📝" FontSize="14"/>
+                                    <Label Text="תיאור המשימה" FontSize="15"
+                                           FontAttributes="Bold" TextColor="#1e1b4b"/>
+                                </HorizontalStackLayout>
+                                <Frame BackgroundColor="#fafafa" CornerRadius="10"
+                                       Padding="0" BorderColor="#e5e7eb"
+                                       HasShadow="False" HeightRequest="100">
+                                    <Editor x:Name="DescriptionEditor"
+                                            Placeholder="הוסף תיאור מפורט למשימה..."
+                                            FontSize="15" BackgroundColor="Transparent"
+                                            PlaceholderColor="#9ca3af" TextColor="#1e1b4b"
+                                            AutoSize="TextChanges"
+                                            Margin="10,6"/>
+                                </Frame>
+                            </VerticalStackLayout>
+
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- SUBMIT BUTTON -->
+                    <Button x:Name="SubmitButton"
+                            Text="＋  הוסף משימה"
+                            FontSize="18" FontAttributes="Bold"
+                            BackgroundColor="#9333ea" TextColor="White"
+                            CornerRadius="12" HeightRequest="55"
+                            Clicked="OnSubmitClicked"
+                            Margin="0,6,0,0">
+                        <Button.Shadow>
+                            <Shadow Brush="#609333ea" Offset="0,4" Radius="10" Opacity="0.4"/>
+                        </Button.Shadow>
+                    </Button>
+
+                    <!-- CANCEL BUTTON -->
+                    <Button Text="✕  ביטול"
+                            FontSize="16"
+                            BackgroundColor="Transparent" TextColor="#6b7280"
+                            CornerRadius="12" HeightRequest="45"
+                            Clicked="OnCancelClicked"/>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

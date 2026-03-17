@@ -2,42 +2,268 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.TasksPage"
-             Title="TasksPage">
+             Title="TasksPage"
+             BackgroundColor="#f3f0ff"
+             FlowDirection="RightToLeft"
+             Shell.NavBarIsVisible="False">
 
-    <VerticalStackLayout Padding="20" Spacing="15">
+    <Grid RowDefinitions="Auto,*,Auto">
 
-        <Button Text="חזור למסך הבית" 
-                Clicked="OnBackClicked"
-                HorizontalOptions="Start" 
-                BackgroundColor="Gray"
-                TextColor="White"
-                HeightRequest="40" />
+        <!-- ===== HEADER BAR ===== -->
+        <Grid Grid.Row="0" BackgroundColor="#9333ea" Padding="16,50,16,16"
+              ColumnDefinitions="Auto,*,Auto">
+            <Label Text="🔔" FontSize="24" TextColor="White"
+                   VerticalOptions="Center" Grid.Column="0"/>
+            <Label Text="מערכת משימות" FontSize="22" FontAttributes="Bold"
+                   TextColor="White" HorizontalOptions="Center"
+                   VerticalOptions="Center" Grid.Column="1"/>
+            <Label Text="☰" FontSize="26" TextColor="White"
+                   VerticalOptions="Center" Grid.Column="2">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackClicked"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
 
-        <Label Text="המשימות שלי"
-               FontSize="30"
-               FontAttributes="Bold"
-               HorizontalOptions="Center" />
+        <!-- ===== SCROLLABLE CONTENT ===== -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="16" Padding="16,20">
 
-        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-            <Entry x:Name="TaskEntry" 
-                   Placeholder="כתוב משימה חדשה..." 
-                   WidthRequest="200" />
+                <!-- SUB-HEADER -->
+                <Label Text="המשימות שלי" FontSize="26" FontAttributes="Bold"
+                       TextColor="#1e1b4b" HorizontalOptions="Center"/>
+                <Label x:Name="DateLabel" FontSize="14" TextColor="#6b7280"
+                       HorizontalOptions="Center"/>
 
-            <Button Text="הוסף" 
-                    Clicked="OnAddTaskClicked" 
-                    BackgroundColor="#512BD4" 
-                    TextColor="White"/>
-        </HorizontalStackLayout>
+                <!-- SEARCH BAR -->
+                <Frame BackgroundColor="White" CornerRadius="12" Padding="0"
+                       BorderColor="Transparent" HasShadow="False">
+                    <Frame.Shadow>
+                        <Shadow Brush="#20000000" Offset="0,2" Radius="8" Opacity="0.3"/>
+                    </Frame.Shadow>
+                    <Grid ColumnDefinitions="Auto,*" Padding="4">
+                        <Frame BackgroundColor="#9333ea" CornerRadius="10"
+                               WidthRequest="44" HeightRequest="44"
+                               Padding="0" BorderColor="Transparent"
+                               Grid.Column="0" HasShadow="False">
+                            <Label Text="⚙" FontSize="20" TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Frame>
+                        <Entry x:Name="SearchEntry" Placeholder="חפש משימה..."
+                               FontSize="16" BackgroundColor="Transparent"
+                               PlaceholderColor="#9ca3af" TextColor="#1e1b4b"
+                               HorizontalTextAlignment="Start"
+                               Margin="12,0,0,0" Grid.Column="1"/>
+                    </Grid>
+                </Frame>
 
-        <CollectionView x:Name="TasksListView">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Margin="0,5" Padding="10" BorderColor="Gray">
-                        <Label Text="{Binding .}" FontSize="18" />
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                <!-- STATS CARDS with white border indicator -->
+                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                    <HorizontalStackLayout Spacing="12">
 
-    </VerticalStackLayout>
+                        <!-- Total -->
+                        <Frame x:Name="StatTotalFrame"
+                               BackgroundColor="#9333ea" CornerRadius="15"
+                               WidthRequest="130" HeightRequest="90"
+                               Padding="14" BorderColor="White" HasShadow="False">
+                            <Frame.Shadow>
+                                <Shadow Brush="#409333ea" Offset="0,4" Radius="10" Opacity="0.4"/>
+                            </Frame.Shadow>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnStatTotalTapped"/>
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="סה״כ" FontSize="13" TextColor="#e0d0ff"/>
+                                <Label x:Name="TotalCountLabel" Text="0"
+                                       FontSize="28" FontAttributes="Bold" TextColor="White"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- In Progress -->
+                        <Frame x:Name="StatInProgressFrame"
+                               BackgroundColor="#2563eb" CornerRadius="15"
+                               WidthRequest="130" HeightRequest="90"
+                               Padding="14" BorderColor="Transparent" HasShadow="False">
+                            <Frame.Shadow>
+                                <Shadow Brush="#402563eb" Offset="0,4" Radius="10" Opacity="0.4"/>
+                            </Frame.Shadow>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnStatInProgressTapped"/>
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="בתהליך" FontSize="13" TextColor="#bfdbfe"/>
+                                <Label x:Name="InProgressCountLabel" Text="0"
+                                       FontSize="28" FontAttributes="Bold" TextColor="White"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Completed -->
+                        <Frame x:Name="StatCompletedFrame"
+                               BackgroundColor="#16a34a" CornerRadius="15"
+                               WidthRequest="130" HeightRequest="90"
+                               Padding="14" BorderColor="Transparent" HasShadow="False">
+                            <Frame.Shadow>
+                                <Shadow Brush="#4016a34a" Offset="0,4" Radius="10" Opacity="0.4"/>
+                            </Frame.Shadow>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnStatCompletedTapped"/>
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="הושלם" FontSize="13" TextColor="#bbf7d0"/>
+                                <Label x:Name="CompletedCountLabel" Text="0"
+                                       FontSize="28" FontAttributes="Bold" TextColor="White"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Urgent -->
+                        <Frame x:Name="StatUrgentFrame"
+                               BackgroundColor="#dc2626" CornerRadius="15"
+                               WidthRequest="130" HeightRequest="90"
+                               Padding="14" BorderColor="Transparent" HasShadow="False">
+                            <Frame.Shadow>
+                                <Shadow Brush="#40dc2626" Offset="0,4" Radius="10" Opacity="0.4"/>
+                            </Frame.Shadow>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnStatUrgentTapped"/>
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="דחוף" FontSize="13" TextColor="#fecaca"/>
+                                <Label x:Name="UrgentCountLabel" Text="0"
+                                       FontSize="28" FontAttributes="Bold" TextColor="White"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                    </HorizontalStackLayout>
+                </ScrollView>
+
+                <!-- TABS with active highlight -->
+                <Frame BackgroundColor="White" CornerRadius="12" Padding="6"
+                       BorderColor="Transparent" HasShadow="False">
+                    <Frame.Shadow>
+                        <Shadow Brush="#15000000" Offset="0,1" Radius="4" Opacity="0.2"/>
+                    </Frame.Shadow>
+                    <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Button x:Name="TabAllButton"
+                                Text="הכל" FontSize="14" FontAttributes="Bold"
+                                BackgroundColor="#9333ea" TextColor="White"
+                                CornerRadius="10" HeightRequest="38"
+                                Padding="18,0" Clicked="OnTabAllClicked"/>
+                        <Button x:Name="TabTodayButton"
+                                Text="היום" FontSize="14"
+                                BackgroundColor="#f3f0ff" TextColor="#9333ea"
+                                CornerRadius="10" HeightRequest="38"
+                                Padding="18,0" Clicked="OnTabTodayClicked"/>
+                        <Button x:Name="TabWeekButton"
+                                Text="השבוע" FontSize="14"
+                                BackgroundColor="#f3f0ff" TextColor="#9333ea"
+                                CornerRadius="10" HeightRequest="38"
+                                Padding="18,0" Clicked="OnTabWeekClicked"/>
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <!-- TASK LIST — swipe only from right side -->
+                <CollectionView x:Name="TasksListView" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <SwipeView>
+                                <!-- Swipe from right side only -->
+                                <SwipeView.RightItems>
+                                    <SwipeItems Mode="Reveal">
+                                        <SwipeItem Text="עריכה"
+                                                   BackgroundColor="#9333ea"
+                                                   Invoked="OnSwipeEditInvoked"
+                                                   CommandParameter="{Binding .}"/>
+                                        <SwipeItem Text="מחיקה"
+                                                   BackgroundColor="#dc2626"
+                                                   IsDestructive="True"
+                                                   Invoked="OnSwipeDeleteInvoked"
+                                                   CommandParameter="{Binding .}"/>
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+
+                                <Frame BackgroundColor="White" CornerRadius="15"
+                                       Padding="16" Margin="0,0,0,12"
+                                       BorderColor="Transparent" HasShadow="False">
+                                    <Frame.Shadow>
+                                        <Shadow Brush="#18000000" Offset="0,3" Radius="10" Opacity="0.25"/>
+                                    </Frame.Shadow>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnTaskCardTapped"
+                                                              CommandParameter="{Binding .}"/>
+                                    </Frame.GestureRecognizers>
+                                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+
+                                        <Label Text="{Binding Title}" FontSize="18"
+                                               FontAttributes="Bold" TextColor="#1e1b4b"
+                                               Grid.Row="0" Grid.Column="0"/>
+
+                                        <!-- CheckBox centered vertically -->
+                                        <CheckBox IsChecked="{Binding IsCompleted}"
+                                                  Color="#9333ea"
+                                                  CheckedChanged="OnCheckBoxChanged"
+                                                  Grid.Row="0" Grid.Column="1"
+                                                  Grid.RowSpan="4"
+                                                  VerticalOptions="Center"/>
+
+                                        <Label Text="{Binding Description}" FontSize="14"
+                                               TextColor="#6b7280" LineBreakMode="TailTruncation"
+                                               Grid.Row="1" Grid.Column="0" Margin="0,2,0,8"/>
+
+                                        <HorizontalStackLayout Grid.Row="2" Grid.Column="0"
+                                                               Spacing="10">
+                                            <Frame BackgroundColor="{Binding CategoryColor}"
+                                                   CornerRadius="8" Padding="10,4"
+                                                   BorderColor="Transparent" HasShadow="False">
+                                                <Label Text="{Binding Category}" FontSize="12"
+                                                       TextColor="White" FontAttributes="Bold"/>
+                                            </Frame>
+                                            <Frame BackgroundColor="{Binding PriorityBackgroundColor}"
+                                                   CornerRadius="8" Padding="10,4"
+                                                   BorderColor="{Binding PriorityColor}"
+                                                   HasShadow="False">
+                                                <Label Text="{Binding Priority}" FontSize="12"
+                                                       TextColor="{Binding PriorityColor}"
+                                                       FontAttributes="Bold"/>
+                                            </Frame>
+                                        </HorizontalStackLayout>
+
+                                        <HorizontalStackLayout Grid.Row="3" Grid.Column="0"
+                                                               Spacing="16"
+                                                               Margin="0,10,0,0">
+                                            <HorizontalStackLayout Spacing="4">
+                                                <Label Text="📅" FontSize="13"/>
+                                                <Label Text="{Binding Date}" FontSize="13"
+                                                       TextColor="#6b7280"/>
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Spacing="4">
+                                                <Label Text="👤" FontSize="13"/>
+                                                <Label Text="{Binding TeacherName}" FontSize="13"
+                                                       TextColor="#6b7280"/>
+                                            </HorizontalStackLayout>
+                                        </HorizontalStackLayout>
+
+                                    </Grid>
+                                </Frame>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ===== FAB ===== -->
+        <Button Text="＋" FontSize="30" FontAttributes="Bold"
+                TextColor="White" BackgroundColor="#9333ea"
+                CornerRadius="30" WidthRequest="60" HeightRequest="60"
+                Grid.Row="2" Margin="20,0,0,20"
+                HorizontalOptions="Start" VerticalOptions="End"
+                Clicked="OnAddTaskClicked">
+            <Button.Shadow>
+                <Shadow Brush="#609333ea" Offset="0,4" Radius="12" Opacity="0.5"/>
+            </Button.Shadow>
+        </Button>
+
+    </Grid>
 </ContentPage>

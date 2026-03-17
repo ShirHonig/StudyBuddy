@@ -2,9 +2,6 @@
 
 public partial class MainPage : ContentPage
 {
-    // משתנה שסופר כמה פעמים לחצו (נשאר מהקוד הישן, לא מפריע)
-    int count = 0;
-
     public MainPage()
     {
         InitializeComponent();

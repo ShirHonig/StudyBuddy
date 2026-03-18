@@ -19,10 +19,13 @@
 
             <BoxView HeightRequest="20" Color="Transparent"/>
 
-            <Entry Placeholder="שם משתמש"
+            <Entry x:Name="EmailEntry"
+               Placeholder="אימייל"
+               Keyboard="Email"
                FontSize="18" />
 
-            <Entry Placeholder="סיסמה"
+            <Entry x:Name="PasswordEntry"
+               Placeholder="סיסמה"
                IsPassword="True"
                FontSize="18" />
 
@@ -36,6 +39,7 @@
                 FontAttributes="Bold"/>
 
             <Button Text="אין לך חשבון? הירשם כאן"
+                Clicked="OnRegisterClicked"
                 BackgroundColor="Transparent"
                 TextColor="Gray"
                 FontSize="14"/>

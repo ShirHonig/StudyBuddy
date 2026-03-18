@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+#if ANDROID
+using Plugin.Firebase.Auth;
+#endif
 
 namespace StudyBuddy
 {
@@ -14,6 +17,10 @@ namespace StudyBuddy
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+#if ANDROID
+            builder.Services.AddSingleton(_ => CrossFirebaseAuth.Current);
+#endif
 
 #if DEBUG
     		builder.Logging.AddDebug();

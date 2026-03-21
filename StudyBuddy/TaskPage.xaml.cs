@@ -1,12 +1,14 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
 using StudyBuddy.Models;
+using StudyBuddy.Services;
 
 namespace StudyBuddy;
 
 public partial class TasksPage : ContentPage
 {
     private static readonly CultureInfo HebrewCulture = new("he-IL");
+    private readonly TaskFirestoreService _taskService = new();
 
     public ObservableCollection<TaskItem> AllTasks { get; set; }
 
@@ -15,55 +17,14 @@ public partial class TasksPage : ContentPage
         InitializeComponent();
 
         DateLabel.Text = DateTime.Now.ToString("dd/MM/yyyy, dddd", HebrewCulture);
-
-        AllTasks = new ObservableCollection<TaskItem>
-        {
-            new TaskItem
-            {
-                Title = "פרויקט גמר",
-                Description = "להגיש את פרק ג׳ של הפרויקט",
-                Category = "מדעי המחשב",
-                CategoryColor = "#9333ea",
-                Date = "20/03/2026",
-                TeacherName = "ד״ר כהן",
-                Priority = "גבוהה",
-                IsUrgent = true,
-                Status = "בתהליך"
-            },
-            new TaskItem
-            {
-                Title = "תרגיל 5 - אינטגרלים",
-                Description = "לפתור תרגילים 1-10 בעמוד 87",
-                Category = "מתמטיקה",
-                CategoryColor = "#2563eb",
-                Date = "22/03/2026",
-                TeacherName = "גב׳ לוי",
-                Priority = "בינונית",
-                IsUrgent = false,
-                Status = "בתהליך"
-            },
-            new TaskItem
-            {
-                Title = "סיכום פרק 4",
-                Description = "לסכם את פרק המהפכה התעשייתית",
-                Category = "היסטוריה",
-                CategoryColor = "#ea580c",
-                Date = "18/03/2026",
-                TeacherName = "מר אברהם",
-                Priority = "נמוכה",
-                IsUrgent = false,
-                IsCompleted = true,
-                Status = "הושלם"
-            }
-        };
+        AllTasks = [];
 
         RefreshSortedList();
         UpdateStats();
-        // Default: "סה״כ" is selected
         HighlightStatCard(StatTotalFrame);
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
 
@@ -79,11 +40,34 @@ public partial class TasksPage : ContentPage
             RefreshSortedList();
             UpdateStats();
         });
+
+        await LoadTasksAsync();
     }
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
+        MessagingCenter.Unsubscribe<AddTaskPage, TaskItem>(this, "TaskAdded");
+        MessagingCenter.Unsubscribe<AddTaskPage, TaskItem>(this, "TaskEdited");
+    }
+
+    private async Task LoadTasksAsync()
+    {
+        try
+        {
+            var tasks = await _taskService.GetTasksAsync();
+            AllTasks.Clear();
+            foreach (var task in tasks)
+                AllTasks.Add(task);
+
+            RefreshSortedList();
+            UpdateStats();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[Firebase] Load failed: {ex}");
+            await DisplayAlert("שגיאה", "טעינת המשימות מ-Firebase נכשלה.", "אישור");
+        }
     }
 
     // ==================== SORTING ====================
@@ -153,7 +137,7 @@ public partial class TasksPage : ContentPage
 
     // ==================== CHECKBOX (mark complete) ====================
 
-    private void OnCheckBoxChanged(object sender, CheckedChangedEventArgs e)
+    private async void OnCheckBoxChanged(object sender, CheckedChangedEventArgs e)
     {
         if (sender is CheckBox checkBox && checkBox.BindingContext is TaskItem task)
         {
@@ -162,6 +146,7 @@ public partial class TasksPage : ContentPage
 
             RefreshSortedList();
             UpdateStats();
+            await _taskService.UpdateTaskAsync(task);
         }
     }
 
@@ -220,6 +205,7 @@ public partial class TasksPage : ContentPage
 
         if (confirm)
         {
+            await _taskService.DeleteTaskAsync(task.Id);
             AllTasks.Remove(task);
             RefreshSortedList();
             UpdateStats();

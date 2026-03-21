@@ -1,4 +1,5 @@
 using StudyBuddy.Models;
+using StudyBuddy.Services;
 
 namespace StudyBuddy;
 
@@ -7,6 +8,7 @@ public partial class AddTaskPage : ContentPage
     private string _selectedPriority = "נמוכה";
     private readonly TaskItem? _editingTask;
     private readonly bool _isEditMode;
+    private readonly TaskFirestoreService _taskService = new();
 
     private static readonly Dictionary<string, string> CategoryColors = new()
     {
@@ -171,35 +173,58 @@ public partial class AddTaskPage : ContentPage
         string category = CategoryPicker.SelectedItem as string ?? "כללי";
         CategoryColors.TryGetValue(category, out string? catColor);
 
-        if (_isEditMode && _editingTask is not null)
-        {
-            _editingTask.Title = TitleEntry.Text.Trim();
-            _editingTask.Description = DescriptionEditor.Text?.Trim() ?? string.Empty;
-            _editingTask.Category = category;
-            _editingTask.CategoryColor = catColor ?? "#9333ea";
-            _editingTask.Date = DueDatePicker.Date.ToString("dd/MM/yyyy");
-            _editingTask.Priority = _selectedPriority;
-            _editingTask.IsUrgent = _selectedPriority == "גבוהה";
+        SubmitButton.IsEnabled = false;
+        SubmitButton.Text = "שומר...";
 
-            MessagingCenter.Send(this, "TaskEdited", _editingTask);
-        }
-        else
+        // Capture the main-thread SynchronizationContext before any await
+        var uiContext = SynchronizationContext.Current;
+
+        try
         {
-            var newTask = new TaskItem
+            if (_isEditMode && _editingTask is not null)
             {
-                Title = TitleEntry.Text.Trim(),
-                Description = DescriptionEditor.Text?.Trim() ?? string.Empty,
-                Category = category,
-                CategoryColor = catColor ?? "#9333ea",
-                Date = DueDatePicker.Date.ToString("dd/MM/yyyy"),
-                TeacherName = string.Empty,
-                Priority = _selectedPriority,
-                IsUrgent = _selectedPriority == "גבוהה",
-                Status = "בתהליך"
-            };
+                _editingTask.Title = TitleEntry.Text.Trim();
+                _editingTask.Description = DescriptionEditor.Text?.Trim() ?? string.Empty;
+                _editingTask.Category = category;
+                _editingTask.CategoryColor = catColor ?? "#9333ea";
+                _editingTask.Date = DueDatePicker.Date.ToString("dd/MM/yyyy");
+                _editingTask.Priority = _selectedPriority;
+                _editingTask.IsUrgent = _selectedPriority == "גבוהה";
 
-            MessagingCenter.Send(this, "TaskAdded", newTask);
+                await _taskService.UpdateTaskAsync(_editingTask);
+            }
+            else
+            {
+                var newTask = new TaskItem
+                {
+                    Title = TitleEntry.Text.Trim(),
+                    Description = DescriptionEditor.Text?.Trim() ?? string.Empty,
+                    Category = category,
+                    CategoryColor = catColor ?? "#9333ea",
+                    Date = DueDatePicker.Date.ToString("dd/MM/yyyy"),
+                    TeacherName = string.Empty,
+                    Priority = _selectedPriority,
+                    IsUrgent = _selectedPriority == "גבוהה",
+                    Status = "בתהליך"
+                };
+
+                await _taskService.AddTaskAsync(newTask);
+            }
         }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[Firebase] Save failed: {ex}");
+            await DisplayAlert("שגיאה", $"שמירה נכשלה:\n{ex.Message}", "אישור");
+            SubmitButton.IsEnabled = true;
+            SubmitButton.Text = "＋  הוסף משימה";
+            return;
+        }
+
+        // Navigate back on the main thread regardless of which thread Firebase resumed on
+        if (uiContext != null)
+            uiContext.Post(_ => Navigation.PopAsync(), null);
+        else
+            await Navigation.PopAsync();
 
         await Navigation.PopAsync();
     }

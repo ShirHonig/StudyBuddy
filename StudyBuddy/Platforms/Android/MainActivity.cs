@@ -1,9 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Plugin.Firebase.Bundled.Shared;
-using Plugin.Firebase.Bundled.Platforms.Android;
-using Firebase.Crashlytics;
+using Plugin.Firebase.Core.Platforms.Android;
 
 namespace StudyBuddy
 {
@@ -13,14 +11,7 @@ namespace StudyBuddy
         protected override void OnCreate(Bundle? savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
-            FirebaseCrashlytics.Instance.SetCrashlyticsCollectionEnabled(false);
-
-            CrossFirebase.Initialize(this, null, new CrossFirebaseSettings(
-                isAuthEnabled: true,
-                isFirestoreEnabled: false,
-                isCloudMessagingEnabled: false
-            ));
+            CrossFirebase.Initialize(this, () => this);
         }
     }
 }

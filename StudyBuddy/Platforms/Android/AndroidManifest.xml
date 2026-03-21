@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 <application android:allowBackup="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true">
-<meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
-<meta-data android:name="com.crashlytics.build_id" android:value="1" />
-<meta-data android:name="com.google.firebase.crashlytics.mapping_file_id" android:value="none" />
 </application>
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.INTERNET" />

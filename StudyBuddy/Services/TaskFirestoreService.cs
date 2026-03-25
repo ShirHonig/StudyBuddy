@@ -7,9 +7,9 @@ namespace StudyBuddy.Services;
 
 public class TaskFirestoreService
 {
-    private const string UserId = "default-user";
     private const string ProjectId = "studdybuddy-app522";
-    private const string BaseUrl = $"https://firestore.googleapis.com/v1/projects/{ProjectId}/databases/(default)/documents/users/{UserId}/tasks";
+    private static string BaseUrl =>
+        $"https://firestore.googleapis.com/v1/projects/{ProjectId}/databases/(default)/documents/users/{UserSession.Uid}/tasks";
 
     private static readonly HttpClient Http = new();
     private static readonly System.Text.Json.JsonSerializerOptions JsonOpts =

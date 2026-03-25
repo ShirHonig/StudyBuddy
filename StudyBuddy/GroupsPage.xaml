@@ -2,43 +2,192 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.GroupsPage"
-             Title="קבוצות לימוד"
-             BackgroundColor="#F0F0F0">
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#f7fafd">
 
-            <Label Text="קבוצות לימוד"
-                   FontSize="24" FontAttributes="Bold" TextColor="#333"
-                   HorizontalOptions="Center" />
+    <Grid RowDefinitions="64,*,76">
 
-            <Entry x:Name="GroupEntry"
-                   Placeholder="שם הקבוצה"
-                   FontSize="18" />
+        <!-- ── Top App Bar ───────────────────────────────────────────────────── -->
+        <Grid Grid.Row="0" BackgroundColor="#f7fafd" Padding="16,0"
+              ColumnDefinitions="Auto,*,Auto">
+            <!-- Avatar -->
+            <Frame Grid.Column="0" WidthRequest="34" HeightRequest="34" CornerRadius="17"
+                   BackgroundColor="#96a5ff" Padding="0" BorderColor="Transparent"
+                   IsClippedToBounds="True" VerticalOptions="Center">
+                <Label Text="א" TextColor="#27378a" FontAttributes="Bold" FontSize="14"
+                       HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Frame>
+            <!-- Title -->
+            <Label Grid.Column="1" Text="StudyBuddy"
+                   FontSize="20" FontAttributes="Bold" TextColor="#0040a1"
+                   HorizontalOptions="Center" VerticalOptions="Center"/>
+            <!-- Bell -->
+            <Label Grid.Column="2" Text="🔔" FontSize="20"
+                   VerticalOptions="Center" HorizontalOptions="End"/>
+        </Grid>
 
-            <Button Text="צור קבוצה"
-                    Clicked="OnAddGroupClicked"
-                    BackgroundColor="#D42B72"
-                    TextColor="White"
-                    CornerRadius="10"
-                    HeightRequest="50"
-                    FontSize="18"
-                    FontAttributes="Bold" />
+        <!-- ── Scrollable Body ───────────────────────────────────────────────── -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="0" Padding="16,20,16,8">
 
-            <ListView x:Name="GroupsListView"
-                      HasUnevenRows="True">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextCell Text="{Binding}" TextColor="#333" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                <!-- Hero Header -->
+                <VerticalStackLayout Spacing="6" Margin="0,-8,0,20" HorizontalOptions="Center">
+                    <Label Text="קבוצות למידה"
+                           FontSize="38" FontAttributes="Bold" TextColor="#0040a1"
+                           HorizontalOptions="Center" CharacterSpacing="-0.5">
+                        <Label.Shadow>
+                            <Shadow Brush="#0040a1" Offset="0,3" Radius="12" Opacity="0.18"/>
+                        </Label.Shadow>
+                    </Label>
+                </VerticalStackLayout>
 
-            <Button Text="חזור"
-                    Clicked="OnBackClicked"
-                    BackgroundColor="Transparent"
-                    TextColor="Gray"
-                    FontSize="14" />
+                <!-- Create Group Button -->
+                <Button Text="＋  יצירת קבוצה חדשה"
+                        BackgroundColor="#0040a1" TextColor="White"
+                        CornerRadius="14" HeightRequest="52"
+                        FontSize="16" FontAttributes="Bold"
+                        Margin="0,0,0,24"
+                        Clicked="OnCreateGroupClicked"/>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                <!-- Filter Chips -->
+                <ScrollView Orientation="Horizontal"
+                            HorizontalScrollBarVisibility="Never"
+                            FlowDirection="RightToLeft"
+                            Margin="0,0,0,24">
+                    <HorizontalStackLayout x:Name="ChipsContainer" Spacing="8" Padding="0,2"
+                                           FlowDirection="RightToLeft">
+                        <Button x:Name="ChipAll" Text="הכל"
+                                BackgroundColor="#0040a1" TextColor="White"
+                                CornerRadius="20" HeightRequest="36" Padding="16,0"
+                                FontSize="13" FontAttributes="Bold"
+                                Clicked="OnChipClicked"/>
+                        <Button Text="מדעי המחשב"
+                                BackgroundColor="#e5e8eb" TextColor="#424654"
+                                CornerRadius="20" HeightRequest="36" Padding="16,0"
+                                FontSize="13" Clicked="OnChipClicked"/>
+                        <Button Text="מתמטיקה"
+                                BackgroundColor="#e5e8eb" TextColor="#424654"
+                                CornerRadius="20" HeightRequest="36" Padding="16,0"
+                                FontSize="13" Clicked="OnChipClicked"/>
+                        <Button Text="פיזיקה"
+                                BackgroundColor="#e5e8eb" TextColor="#424654"
+                                CornerRadius="20" HeightRequest="36" Padding="16,0"
+                                FontSize="13" Clicked="OnChipClicked"/>
+                        <Button Text="כלכלה"
+                                BackgroundColor="#e5e8eb" TextColor="#424654"
+                                CornerRadius="20" HeightRequest="36" Padding="16,0"
+                                FontSize="13" Clicked="OnChipClicked"/>
+                        <Button Text="פסיכולוגיה"
+                                BackgroundColor="#e5e8eb" TextColor="#424654"
+                                CornerRadius="20" HeightRequest="36" Padding="16,0"
+                                FontSize="13" Clicked="OnChipClicked"/>
+                    </HorizontalStackLayout>
+                </ScrollView>
+
+                <!-- ── Dynamic Group Cards ── -->
+                <CollectionView x:Name="GroupsCollection">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="16"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="White" CornerRadius="18" Padding="0"
+                                   BorderColor="Transparent" IsClippedToBounds="True"
+                                   HasShadow="True">
+                                <VerticalStackLayout Padding="20,18" Spacing="6">
+                                    <!-- Subject label colored -->
+                                    <Label Text="{Binding Subject}"
+                                           FontSize="12" FontAttributes="Bold"
+                                           TextColor="{Binding SubjectColor}"
+                                           HorizontalOptions="End"/>
+                                    <!-- Title -->
+                                    <Label Text="{Binding Title}"
+                                           FontSize="18" FontAttributes="Bold" TextColor="#181c1e"
+                                           HorizontalOptions="End" HorizontalTextAlignment="End"/>
+                                    <!-- Description -->
+                                    <Label Text="{Binding Description}"
+                                           FontSize="13" TextColor="#424654"
+                                           HorizontalOptions="End" HorizontalTextAlignment="End"/>
+                                    <!-- Next meeting -->
+                                    <Label Text="{Binding NextMeetingText}"
+                                           FontSize="12" TextColor="#0040a1" FontAttributes="Bold"
+                                           HorizontalOptions="End"/>
+                                    <!-- Footer: button + creator -->
+                                    <Grid ColumnDefinitions="Auto,*" Margin="0,10,0,0">
+                                        <Button Grid.Column="0" Text="הצטרפות"
+                                                BackgroundColor="#0040a1" TextColor="White"
+                                                CornerRadius="10" HeightRequest="38"
+                                                Padding="16,0" FontSize="13" FontAttributes="Bold"/>
+                                        <HorizontalStackLayout Grid.Column="1" Spacing="8"
+                                                               HorizontalOptions="End"
+                                                               VerticalOptions="Center">
+                                            <Label Text="{Binding CreatorName}"
+                                                   FontSize="13" FontAttributes="Bold"
+                                                   TextColor="#181c1e" VerticalOptions="Center"/>
+                                            <Frame WidthRequest="34" HeightRequest="34" CornerRadius="17"
+                                                   BackgroundColor="{Binding AvatarBg}" Padding="0"
+                                                   BorderColor="Transparent" IsClippedToBounds="True"
+                                                   VerticalOptions="Center">
+                                                <Label Text="{Binding CreatorInitial}"
+                                                       TextColor="{Binding AvatarFg}"
+                                                       FontAttributes="Bold" FontSize="14"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Frame>
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ── Bottom Navigation Bar ─────────────────────────────────────────── -->
+        <Grid Grid.Row="2" BackgroundColor="#f7fafd"
+              ColumnDefinitions="*,*,*,*"
+              Padding="0,8,0,0">
+            <!-- Home -->
+            <VerticalStackLayout Grid.Column="0" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="🏠" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="דף הבית" FontSize="10" TextColor="#424654"
+                       HorizontalOptions="Center"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHomeNavTapped"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <!-- Tasks -->
+            <VerticalStackLayout Grid.Column="1" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="✅" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="משימות" FontSize="10" TextColor="#424654"
+                       HorizontalOptions="Center"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTasksNavTapped"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <!-- Groups (active) -->
+            <Frame Grid.Column="2" BackgroundColor="#dae2ff" CornerRadius="16"
+                   Padding="0,6" BorderColor="Transparent" Margin="4,4">
+                <VerticalStackLayout Spacing="2"
+                                     HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="👥" FontSize="22" HorizontalOptions="Center"/>
+                    <Label Text="קבוצות" FontSize="10" TextColor="#0040a1"
+                           FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+            <!-- Calendar -->
+            <VerticalStackLayout Grid.Column="3" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="📅" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="לוח שנה" FontSize="10" TextColor="#424654"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Grid>
+
+    </Grid>
 </ContentPage>

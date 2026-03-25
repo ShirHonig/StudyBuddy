@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.SignInPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#f7fafd">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="0,0,0,32" Spacing="0">
+
+            <!-- ── Top Bar ── -->
+            <Grid Padding="20,52,20,16" BackgroundColor="#f7fafd">
+                <Label Text="← יציאה חזרה"
+                       FontSize="15" FontAttributes="Bold"
+                       TextColor="#0040a1"
+                       HorizontalOptions="End"
+                       VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+
+            <!-- ── Branding ── -->
+            <VerticalStackLayout Spacing="8" Padding="28,8,28,24" HorizontalOptions="Center">
+                <Label Text="StudyBuddy"
+                       FontSize="30" FontAttributes="Bold"
+                       TextColor="#0040a1"
+                       HorizontalOptions="Center"/>
+                <Label Text="הצטרפו לקהילת הלומדים שלנו"
+                       FontSize="18" FontAttributes="Bold"
+                       TextColor="#181c1e"
+                       HorizontalOptions="Center"/>
+                <Label Text="הכול כדי להצליח: להפוך לסטודנט חכם יותר מתחיל עכשיו"
+                       FontSize="13"
+                       TextColor="#424654"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"/>
+            </VerticalStackLayout>
+
+            <!-- ── Form ── -->
+            <VerticalStackLayout Padding="24,0" Spacing="14">
+
+                <!-- Full Name -->
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="שם מלא"
+                           FontSize="13" FontAttributes="Bold"
+                           TextColor="#424654"
+                           HorizontalOptions="End"/>
+                    <Border BackgroundColor="#e5e8eb" StrokeThickness="0" Padding="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="48,*" HeightRequest="54">
+                            <Label Grid.Column="0" Text="👤" FontSize="20"
+                                   TextColor="#424654"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Entry x:Name="FullNameEntry"
+                                   Grid.Column="1"
+                                   Placeholder="שם פרטי ומשפחה"
+                                   BackgroundColor="Transparent"
+                                   PlaceholderColor="#c3c6d6"
+                                   TextColor="#181c1e" FontSize="15"
+                                   HorizontalTextAlignment="End"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,12,0"/>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Email -->
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="אימייל"
+                           FontSize="13" FontAttributes="Bold"
+                           TextColor="#424654"
+                           HorizontalOptions="End"/>
+                    <Border BackgroundColor="#e5e8eb" StrokeThickness="0" Padding="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="48,*" HeightRequest="54">
+                            <Label Grid.Column="0" Text="✉" FontSize="20"
+                                   TextColor="#424654"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Entry x:Name="EmailEntry"
+                                   Grid.Column="1"
+                                   Placeholder="example@email.com"
+                                   Keyboard="Email"
+                                   BackgroundColor="Transparent"
+                                   PlaceholderColor="#c3c6d6"
+                                   TextColor="#181c1e" FontSize="15"
+                                   HorizontalTextAlignment="End"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,12,0"/>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Username -->
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="שם משתמש"
+                           FontSize="13" FontAttributes="Bold"
+                           TextColor="#424654"
+                           HorizontalOptions="End"/>
+                    <Border BackgroundColor="#e5e8eb" StrokeThickness="0" Padding="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="48,*" HeightRequest="54">
+                            <Label Grid.Column="0" Text="🪪" FontSize="20"
+                                   TextColor="#424654"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Entry x:Name="UsernameEntry"
+                                   Grid.Column="1"
+                                   Placeholder="בחר שם משתמש"
+                                   BackgroundColor="Transparent"
+                                   PlaceholderColor="#c3c6d6"
+                                   TextColor="#181c1e" FontSize="15"
+                                   HorizontalTextAlignment="End"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,12,0"/>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Password -->
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="סיסמה"
+                           FontSize="13" FontAttributes="Bold"
+                           TextColor="#424654"
+                           HorizontalOptions="End"/>
+                    <Border BackgroundColor="#e5e8eb" StrokeThickness="0" Padding="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="48,*" HeightRequest="54">
+                            <Label Grid.Column="0" Text="🔒" FontSize="20"
+                                   TextColor="#424654"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Entry x:Name="PasswordEntry"
+                                   Grid.Column="1"
+                                   Placeholder="לפחות 8 תווים"
+                                   IsPassword="True"
+                                   BackgroundColor="Transparent"
+                                   PlaceholderColor="#c3c6d6"
+                                   TextColor="#181c1e" FontSize="15"
+                                   HorizontalTextAlignment="End"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,12,0"/>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Confirm Password -->
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="אימות סיסמה"
+                           FontSize="13" FontAttributes="Bold"
+                           TextColor="#424654"
+                           HorizontalOptions="End"/>
+                    <Border BackgroundColor="#e5e8eb" StrokeThickness="0" Padding="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="48,*" HeightRequest="54">
+                            <Label Grid.Column="0" Text="🛡️" FontSize="20"
+                                   TextColor="#424654"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Entry x:Name="ConfirmPasswordEntry"
+                                   Grid.Column="1"
+                                   Placeholder="חזור על הסיסמה"
+                                   IsPassword="True"
+                                   BackgroundColor="Transparent"
+                                   PlaceholderColor="#c3c6d6"
+                                   TextColor="#181c1e" FontSize="15"
+                                   HorizontalTextAlignment="End"
+                                   VerticalOptions="Center"
+                                   Margin="0,0,12,0"/>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Register Button -->
+                <Button x:Name="RegisterButton"
+                        Text="צור חשבון"
+                        Clicked="OnRegisterClicked"
+                        HeightRequest="56"
+                        FontSize="17" FontAttributes="Bold"
+                        TextColor="#ffffff"
+                        BackgroundColor="#0040a1"
+                        CornerRadius="12"
+                        Margin="0,8,0,0"/>
+
+                <!-- Footer -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="4" Margin="0,8,0,0">
+                    <Label Text="התחברות"
+                           FontSize="15" FontAttributes="Bold"
+                           TextColor="#0040a1">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnLoginTapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Text="כבר יש לך חשבון?"
+                           FontSize="15" TextColor="#424654"/>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

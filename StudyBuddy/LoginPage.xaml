@@ -23,7 +23,11 @@
                         <Shadow Brush="#181c1e" Offset="0,12" Radius="24" Opacity="0.10"/>
                     </Border.Shadow>
                     <Label Text="🎓" FontSize="38"
-                           HorizontalOptions="Center" VerticalOptions="Center"/>
+                           HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSecretLoginTapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
                 </Border>
 
                 <!-- Title -->
@@ -152,7 +156,11 @@
                 <Label Text="צור חשבון חדש"
                        TextColor="#0040a1"
                        FontAttributes="Bold"
-                       FontSize="15"/>
+                       FontSize="15">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSignInTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
                 <Label Text="?עוד לא חבר"
                        TextColor="#424654"
                        FontSize="15"/>

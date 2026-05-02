@@ -8,6 +8,7 @@ namespace StudyBuddy.Services;
 public class TaskFirestoreService
 {
     private const string ProjectId = "studdybuddy-app522";
+    private const string ApiKey    = "AIzaSyDRqnwE4RRuEmJOJaXWY4_mVhrX5g9Rl80";
     private static string BaseUrl =>
         $"https://firestore.googleapis.com/v1/projects/{ProjectId}/databases/(default)/documents/users/{UserSession.Uid}/tasks";
 
@@ -15,12 +16,24 @@ public class TaskFirestoreService
     private static readonly System.Text.Json.JsonSerializerOptions JsonOpts =
         new(System.Text.Json.JsonSerializerDefaults.General); // PascalCase, no camelCase
 
+    private static HttpRequestMessage AuthedRequest(HttpMethod method, string url)
+    {
+        var req = new HttpRequestMessage(method, url);
+        if (!string.IsNullOrEmpty(UserSession.IdToken))
+            req.Headers.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", UserSession.IdToken);
+        return req;
+    }
+
     // ── REST: Write ──────────────────────────────────────────────────────────
 
     public async Task<string> AddTaskAsync(TaskItem task)
     {
         var body = ToRestDocument(task);
-        var response = await Http.PostAsJsonAsync(BaseUrl, body, JsonOpts);
+        var content = JsonContent.Create(body, options: JsonOpts);
+        var req = AuthedRequest(HttpMethod.Post, $"{BaseUrl}?key={ApiKey}");
+        req.Content = content;
+        var response = await Http.SendAsync(req);
         var json = await response.Content.ReadAsStringAsync();
         System.Diagnostics.Debug.WriteLine($"[Firebase REST] POST status={response.StatusCode} body={json}");
         response.EnsureSuccessStatusCode();
@@ -36,9 +49,12 @@ public class TaskFirestoreService
     {
         if (string.IsNullOrWhiteSpace(task.Id)) return;
 
-        var url = $"{BaseUrl}/{task.Id}";
+        var url = $"{BaseUrl}/{task.Id}?key={ApiKey}";
         var body = ToRestDocument(task);
-        var response = await Http.PatchAsJsonAsync(url, body, JsonOpts);
+        var content = JsonContent.Create(body, options: JsonOpts);
+        var req = AuthedRequest(HttpMethod.Patch, url);
+        req.Content = content;
+        var response = await Http.SendAsync(req);
         System.Diagnostics.Debug.WriteLine($"[Firebase REST] PATCH status={response.StatusCode}");
         response.EnsureSuccessStatusCode();
     }
@@ -47,8 +63,9 @@ public class TaskFirestoreService
     {
         if (string.IsNullOrWhiteSpace(taskId)) return;
 
-        var url = $"{BaseUrl}/{taskId}";
-        var response = await Http.DeleteAsync(url);
+        var url = $"{BaseUrl}/{taskId}?key={ApiKey}";
+        var req = AuthedRequest(HttpMethod.Delete, url);
+        var response = await Http.SendAsync(req);
         System.Diagnostics.Debug.WriteLine($"[Firebase REST] DELETE status={response.StatusCode}");
     }
 
@@ -56,7 +73,8 @@ public class TaskFirestoreService
 
     public async Task<List<TaskItem>> GetTasksAsync()
     {
-        var response = await Http.GetAsync(BaseUrl);
+        var req = AuthedRequest(HttpMethod.Get, $"{BaseUrl}?key={ApiKey}");
+        var response = await Http.SendAsync(req);
         var json = await response.Content.ReadAsStringAsync();
         System.Diagnostics.Debug.WriteLine($"[Firebase REST] GET status={response.StatusCode}");
 

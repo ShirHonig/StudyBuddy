@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             x:Class="StudyBuddy.CreateGroupPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#f7fafd">
+
+    <Grid RowDefinitions="64,*,60,76">
+
+        <!-- ── Top Bar ─────────────────────────────────────────────────────── -->
+        <Grid Grid.Row="0" BackgroundColor="#f7fafd" Padding="8,0"
+              ColumnDefinitions="56,*,56">
+            <Label Grid.Column="0" Text="→" FontSize="22" TextColor="#0040a1"
+                   HorizontalOptions="Center" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Grid.Column="1" Text="קבוצת לימוד חדשה"
+                   FontSize="18" FontAttributes="Bold" TextColor="#181c1e"
+                   HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- ── Form ────────────────────────────────────────────────────────── -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="0" Padding="20,16,20,16">
+
+                <!-- Sub-header -->
+                <Label Text="בניית קבוצת למידה"
+                       FontSize="26" FontAttributes="Bold" TextColor="#181c1e"
+                       Margin="0,0,0,24" HorizontalOptions="End"/>
+
+                <!-- ── Group Name ── -->
+                <Label Text="שם הקבוצה" FontSize="11" FontAttributes="Bold"
+                       TextColor="#0040a1" HorizontalOptions="End" Margin="0,0,4,6"/>
+                <Border BackgroundColor="#e5e8eb" StrokeThickness="0" Margin="0,0,0,28">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
+                    <Entry x:Name="GroupNameEntry"
+                           Placeholder="למשל: מתמטיקה 5 יחידות"
+                           PlaceholderColor="#737785" TextColor="#181c1e"
+                           BackgroundColor="Transparent" FontSize="15"
+                           HorizontalTextAlignment="End"
+                           Margin="16,0" HeightRequest="52"/>
+                </Border>
+
+                <!-- ── Subject Selection ── -->
+                <Label Text="נושא הלימוד" FontSize="11" FontAttributes="Bold"
+                       TextColor="#0040a1" HorizontalOptions="End" Margin="0,0,4,10"/>
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                      ColumnSpacing="10" RowSpacing="10" Margin="0,0,0,8">
+
+                    <!-- מתמטיקה -->
+                    <Frame x:Name="MathFrame" Grid.Row="0" Grid.Column="0"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="מתמטיקה" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="📐" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#2563eb"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="מתמטיקה|#2563eb"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- מדעי המחשב -->
+                    <Frame x:Name="CSFrame" Grid.Row="0" Grid.Column="1"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="מדעי המחשב" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="💻" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#1e293b"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="מדעי המחשב|#1e293b"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- פיזיקה -->
+                    <Frame x:Name="PhysicsFrame" Grid.Row="1" Grid.Column="0"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="פיזיקה" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="⚛️" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#0ea5e9"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="פיזיקה|#0ea5e9"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- כימיה -->
+                    <Frame x:Name="ChemFrame" Grid.Row="1" Grid.Column="1"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="כימיה" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="🧪" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#8b5cf6"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="כימיה|#8b5cf6"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- ביולוגיה -->
+                    <Frame x:Name="BioFrame" Grid.Row="2" Grid.Column="0"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="ביולוגיה" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="🌿" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#16a34a"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="ביולוגיה|#16a34a"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- היסטוריה -->
+                    <Frame x:Name="HistFrame" Grid.Row="2" Grid.Column="1"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="היסטוריה" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="📜" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#f97316"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="היסטוריה|#f97316"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- גיאוגרפיה -->
+                    <Frame x:Name="GeoFrame" Grid.Row="3" Grid.Column="0"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="גיאוגרפיה" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="🌍" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#84cc16"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="גיאוגרפיה|#84cc16"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- ספרות -->
+                    <Frame x:Name="LitFrame" Grid.Row="3" Grid.Column="1"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="ספרות" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="📚" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#ec4899"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="ספרות|#ec4899"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- אנגלית -->
+                    <Frame x:Name="EngFrame" Grid.Row="4" Grid.Column="0"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="אנגלית" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="🔤" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#0891b2"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="אנגלית|#0891b2"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- פסיכולוגיה -->
+                    <Frame x:Name="PsychoFrame" Grid.Row="4" Grid.Column="1"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="פסיכולוגיה" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="🧠" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#9333ea"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="פסיכולוגיה|#9333ea"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- אזרחות -->
+                    <Frame x:Name="CivFrame" Grid.Row="5" Grid.Column="0"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="אזרחות" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="🏛️" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#dc2626"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="אזרחות|#dc2626"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- כלכלה -->
+                    <Frame x:Name="EconFrame" Grid.Row="5" Grid.Column="1"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="כלכלה" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="📈" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#0284c7"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="כלכלה|#0284c7"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- אחר (spans 2 cols) -->
+                    <Frame x:Name="OtherFrame" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+                           BackgroundColor="White" CornerRadius="12" Padding="0"
+                           BorderColor="Transparent" IsClippedToBounds="True" HasShadow="True">
+                        <Grid ColumnDefinitions="*,5">
+                            <HorizontalStackLayout Grid.Column="0" Padding="12,14" Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="אחר" FontSize="13" FontAttributes="Bold"
+                                       TextColor="#181c1e" VerticalOptions="Center"/>
+                                <Label Text="•••" FontSize="18" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <BoxView Grid.Column="1" Color="#737785"/>
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSubjectTapped" CommandParameter="אחר|#737785"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                </Grid>
+
+                <!-- ── Color Picker (visible only when "אחר" selected) ── -->
+                <VerticalStackLayout x:Name="ColorPickerSection" IsVisible="False"
+                                     Margin="0,4,0,0" Spacing="8">
+                    <Label Text="בחר צבע" FontSize="11" FontAttributes="Bold"
+                           TextColor="#0040a1" HorizontalOptions="End" Margin="0,0,4,0"/>
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+                        <Frame x:Name="C1" WidthRequest="34" HeightRequest="34" CornerRadius="17"
+                               BackgroundColor="#ef4444" Padding="0" BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnColorTapped" CommandParameter="#ef4444"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                        <Frame x:Name="C2" WidthRequest="34" HeightRequest="34" CornerRadius="17"
+                               BackgroundColor="#f97316" Padding="0" BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnColorTapped" CommandParameter="#f97316"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                        <Frame x:Name="C3" WidthRequest="34" HeightRequest="34" CornerRadius="17"
+                               BackgroundColor="#eab308" Padding="0" BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnColorTapped" CommandParameter="#eab308"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                        <Frame x:Name="C4" WidthRequest="34" HeightRequest="34" CornerRadius="17"
+                               BackgroundColor="#22c55e" Padding="0" BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnColorTapped" CommandParameter="#22c55e"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                        <Frame x:Name="C5" WidthRequest="34" HeightRequest="34" CornerRadius="17"
+                               BackgroundColor="#06b6d4" Padding="0" BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnColorTapped" CommandParameter="#06b6d4"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                        <Frame x:Name="C6" WidthRequest="34" HeightRequest="34" CornerRadius="17"
+                               BackgroundColor="#3b82f6" Padding="0" BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnColorTapped" CommandParameter="#3b82f6"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                        <Frame x:Name="C7" WidthRequest="34" HeightRequest="34" CornerRadius="17"
+                               BackgroundColor="#8b5cf6" Padding="0" BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnColorTapped" CommandParameter="#8b5cf6"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                        <Frame x:Name="C8" WidthRequest="34" HeightRequest="34" CornerRadius="17"
+                               BackgroundColor="#ec4899" Padding="0" BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnColorTapped" CommandParameter="#ec4899"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- ── Next Meeting Date ── -->
+                <Label Text="תאריך הפגישה הבאה" FontSize="11" FontAttributes="Bold"
+                       TextColor="#0040a1" HorizontalOptions="End" Margin="0,24,4,6"/>
+                <Border BackgroundColor="#e5e8eb" StrokeThickness="0" Margin="0,0,0,4">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
+                    <DatePicker x:Name="MeetingDatePicker"
+                                MinimumDate="{x:Static sys:DateTime.Today}"
+                                Format="dd/MM/yyyy"
+                                TextColor="#181c1e" BackgroundColor="Transparent"
+                                FontSize="15" HorizontalOptions="End"
+                                Margin="16,4"/>
+                </Border>
+                <Label Text="" Margin="0,0,0,24"/>
+
+                <!-- ── Description ── -->
+                <Label Text="תיאור הקבוצה" FontSize="11" FontAttributes="Bold"
+                       TextColor="#0040a1" HorizontalOptions="End" Margin="0,24,4,6"/>
+                <Border BackgroundColor="#e5e8eb" StrokeThickness="0" Margin="0,0,0,28">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
+                    <Editor x:Name="DescriptionEditor"
+                            Placeholder="מה המטרה של הקבוצה? שתפו ועוד..."
+                            PlaceholderColor="#737785" TextColor="#181c1e"
+                            BackgroundColor="Transparent" FontSize="14"
+                            HorizontalTextAlignment="End"
+                            MinimumHeightRequest="100"
+                            Margin="12,8"/>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ── Create Button (fixed, always visible) ─────────────────────────── -->
+        <Button Grid.Row="2"
+                x:Name="CreateButton"
+                Text="＋  צור קבוצה חדשה"
+                BackgroundColor="#0040a1" TextColor="White"
+                CornerRadius="14" HeightRequest="50"
+                FontSize="16" FontAttributes="Bold"
+                Margin="20,4,20,4"
+                Clicked="OnCreateClicked"/>
+
+        <!-- ── Bottom Navigation Bar ─────────────────────────────────────────── -->
+        <Grid Grid.Row="3" BackgroundColor="#f7fafd"
+              ColumnDefinitions="*,*,*,*" Padding="0,8,0,0">
+            <VerticalStackLayout Grid.Column="0" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="🏠" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="דף הבית" FontSize="10" TextColor="#424654" HorizontalOptions="Center"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHomeNavTapped"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="1" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="✅" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="משימות" FontSize="10" TextColor="#424654" HorizontalOptions="Center"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTasksNavTapped"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <Frame Grid.Column="2" BackgroundColor="#dae2ff" CornerRadius="16"
+                   Padding="0,6" BorderColor="Transparent" Margin="4,4">
+                <VerticalStackLayout Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="👥" FontSize="22" HorizontalOptions="Center"/>
+                    <Label Text="קבוצות" FontSize="10" TextColor="#0040a1"
+                           FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+            <VerticalStackLayout Grid.Column="3" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="📅" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="לוח שנה" FontSize="10" TextColor="#424654" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Grid>
+
+    </Grid>
+</ContentPage>

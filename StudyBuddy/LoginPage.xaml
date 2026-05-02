@@ -130,7 +130,8 @@
                         </VerticalStackLayout>
 
                         <!-- Login Button -->
-                        <Button Text="← התחברות"
+                        <Button x:Name="LoginButton"
+                                Text="← התחברות"
                                 Clicked="OnLoginClicked"
                                 HeightRequest="56"
                                 FontSize="17"

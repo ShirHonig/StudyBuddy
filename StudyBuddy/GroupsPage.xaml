@@ -41,13 +41,59 @@
                     </Label>
                 </VerticalStackLayout>
 
-                <!-- Create Group Button -->
-                <Button Text="＋  יצירת קבוצה חדשה"
-                        BackgroundColor="#0040a1" TextColor="White"
-                        CornerRadius="14" HeightRequest="52"
-                        FontSize="16" FontAttributes="Bold"
-                        Margin="0,0,0,24"
-                        Clicked="OnCreateGroupClicked"/>
+                <!-- Create / Join buttons -->
+                <Grid ColumnDefinitions="*,12,*" Margin="0,0,0,24">
+                    <Button Grid.Column="0" Text="＋  יצירת קבוצה"
+                            BackgroundColor="#0040a1" TextColor="White"
+                            CornerRadius="14" HeightRequest="52"
+                            FontSize="14" FontAttributes="Bold"
+                            Clicked="OnCreateGroupClicked"/>
+                    <Button Grid.Column="2" Text="🔍  הצטרפות לקבוצה"
+                            BackgroundColor="White" TextColor="#0040a1"
+                            BorderColor="#0040a1" BorderWidth="1.5"
+                            CornerRadius="14" HeightRequest="52"
+                            FontSize="14" FontAttributes="Bold"
+                            Clicked="OnJoinGroupClicked"/>
+                </Grid>
+
+                <!-- My Groups Section -->
+                <VerticalStackLayout x:Name="MyGroupsSection" IsVisible="False" Margin="0,0,0,24">
+                    <Label Text="📚 הקבוצות שלי" FontSize="18" FontAttributes="Bold"
+                           TextColor="#181c1e" HorizontalOptions="End" Margin="0,0,0,12"/>
+                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                        <CollectionView x:Name="MyGroupsCollection"
+                                        ItemsLayout="HorizontalList">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BackgroundColor="White" CornerRadius="14" Padding="16"
+                                           BorderColor="Transparent" HasShadow="True"
+                                           Margin="0,0,12,0" WidthRequest="200">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnMyGroupTapped"/>
+                                        </Frame.GestureRecognizers>
+                                        <VerticalStackLayout Spacing="6">
+                                            <Label Text="{Binding Subject}" FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding SubjectColor}"
+                                                   HorizontalOptions="End"/>
+                                            <Label Text="{Binding Title}" FontSize="15"
+                                                   FontAttributes="Bold" TextColor="#181c1e"
+                                                   HorizontalOptions="End" LineBreakMode="TailTruncation"/>
+                                            <Label Text="{Binding NextMeetingText}" FontSize="11"
+                                                   TextColor="#0040a1" HorizontalOptions="End"/>
+                                            <Label Text="{Binding MemberCountText}" FontSize="11"
+                                                   TextColor="#737785" HorizontalOptions="End"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
+                </VerticalStackLayout>
+
+                <!-- All Groups Header -->
+                <Label Text="🌐 כל הקבוצות" FontSize="18" FontAttributes="Bold"
+                       TextColor="#181c1e" HorizontalOptions="End" Margin="0,0,0,12"/>
 
                 <!-- Filter Chips -->
                 <ScrollView Orientation="Horizontal"
@@ -94,6 +140,9 @@
                             <Frame BackgroundColor="White" CornerRadius="18" Padding="0"
                                    BorderColor="Transparent" IsClippedToBounds="True"
                                    HasShadow="True">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnGroupCardTapped"/>
+                                </Frame.GestureRecognizers>
                                 <VerticalStackLayout Padding="20,18" Spacing="6">
                                     <!-- Subject label colored -->
                                     <Label Text="{Binding Subject}"
@@ -186,6 +235,9 @@
                 <Label Text="📅" FontSize="22" HorizontalOptions="Center"/>
                 <Label Text="לוח שנה" FontSize="10" TextColor="#424654"
                        HorizontalOptions="Center"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCalendarNavTapped"/>
+                </VerticalStackLayout.GestureRecognizers>
             </VerticalStackLayout>
         </Grid>
 

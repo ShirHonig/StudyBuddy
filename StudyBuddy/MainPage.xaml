@@ -1,58 +1,247 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.MainPage"
-             Title="לוח בקרה אישי"
-             BackgroundColor="#F0F0F0">
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#f7fafd">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
+    <Grid RowDefinitions="64,*,76">
 
-            <Label Text="היי, תלמיד!" 
-                   FontSize="24" FontAttributes="Bold" TextColor="#333"/>
-            <Label Text="הנה מה שמחכה לך היום:" 
-                   FontSize="16" TextColor="Gray"/>
+        <!-- ── Top App Bar ───────────────────────────────────────────────────── -->
+        <Grid Grid.Row="0" BackgroundColor="#f7fafd" Padding="16,0"
+              ColumnDefinitions="Auto,*,Auto">
+            <Frame Grid.Column="0" WidthRequest="34" HeightRequest="34" CornerRadius="17"
+                   BackgroundColor="#96a5ff" Padding="0" BorderColor="Transparent"
+                   IsClippedToBounds="True" VerticalOptions="Center">
+                <Label x:Name="AvatarLabel" Text="?" TextColor="#27378a"
+                       FontAttributes="Bold" FontSize="14"
+                       HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Frame>
+            <Label Grid.Column="1" Text="StudyBuddy"
+                   FontSize="20" FontAttributes="Bold" TextColor="#0040a1"
+                   HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Grid.Column="2" Text="&#x1F514;" FontSize="20"
+                   VerticalOptions="Center" HorizontalOptions="End"/>
+        </Grid>
 
-            <Grid RowDefinitions="150, 150" ColumnDefinitions="*, *" ColumnSpacing="15" RowSpacing="15">
+        <!-- ── Scrollable Body ───────────────────────────────────────────────── -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="0" Padding="16,20,16,8">
 
-                <Frame Grid.Row="0" Grid.Column="0" BackgroundColor="#512BD4" CornerRadius="15" BorderColor="Transparent">
-                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Label Text="📅" FontSize="40" HorizontalOptions="Center"/>
-                        <Label Text="מערכת שעות" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnScheduleClicked"/>
-                    </Frame.GestureRecognizers>
-                </Frame>
+                <!-- Hero Header -->
+                <VerticalStackLayout Spacing="6" Margin="0,-8,0,8" HorizontalOptions="Center">
+                    <Label x:Name="GreetingLabel" Text="&#x1F44B; ,&#x05D4;&#x05D9;&#x05D9;"
+                           FontSize="34" FontAttributes="Bold" TextColor="#0040a1"
+                           HorizontalOptions="Center" CharacterSpacing="-0.5">
+                        <Label.Shadow>
+                            <Shadow Brush="#0040a1" Offset="0,3" Radius="12" Opacity="0.18"/>
+                        </Label.Shadow>
+                    </Label>
+                    <Label x:Name="SubtitleLabel" Text="&#x05DE;&#x05D4; &#x05DE;&#x05D7;&#x05DB;&#x05D4; &#x05DC;&#x05DA; &#x05D4;&#x05D9;&#x05D5;&#x05DD;?"
+                           FontSize="15" TextColor="#737785"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
 
-                <Frame Grid.Row="0" Grid.Column="1" BackgroundColor="#2B72D4" CornerRadius="15" BorderColor="Transparent">
-                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Label Text="📝" FontSize="40" HorizontalOptions="Center"/>
-                        <Label Text="מטלות שלי" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnTasksClicked"/>
-                    </Frame.GestureRecognizers>
-                </Frame>
+                <!-- Date -->
+                <Label x:Name="DateLabel" FontSize="13" TextColor="#424654"
+                       HorizontalOptions="Center" Margin="0,0,0,24"/>
 
-                <Frame Grid.Row="1" Grid.Column="0" BackgroundColor="#D42B72" CornerRadius="15" BorderColor="Transparent">
-                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Label Text="👥" FontSize="40" HorizontalOptions="Center"/>
-                        <Label Text="קבוצות לימוד" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnGroupsClicked"/>
-                    </Frame.GestureRecognizers>
-                </Frame>
+                <!-- ── Quick Stats Row ── -->
+                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never"
+                            Margin="0,0,0,24">
+                    <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
+                        <!-- Tasks stat -->
+                        <Frame BackgroundColor="White" CornerRadius="18" Padding="20,16"
+                               BorderColor="Transparent" HasShadow="True"
+                               WidthRequest="155" HeightRequest="100">
+                            <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                                <Label Text="&#x2705;" FontSize="28" HorizontalOptions="Center"/>
+                                <Label x:Name="TaskCountLabel" Text="0 &#x05DE;&#x05E9;&#x05D9;&#x05DE;&#x05D5;&#x05EA;"
+                                       FontSize="14" FontAttributes="Bold"
+                                       TextColor="#181c1e" HorizontalOptions="Center"/>
+                                <Label x:Name="TaskSubLabel" Text=""
+                                       FontSize="11" TextColor="#737785"
+                                       HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Frame>
 
-                <Frame Grid.Row="1" Grid.Column="1" BackgroundColor="Gray" CornerRadius="15" BorderColor="Transparent">
-                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Label Text="⚙️" FontSize="40" HorizontalOptions="Center"/>
-                        <Label Text="הגדרות" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-                </Frame>
+                        <!-- Groups stat -->
+                        <Frame BackgroundColor="White" CornerRadius="18" Padding="20,16"
+                               BorderColor="Transparent" HasShadow="True"
+                               WidthRequest="155" HeightRequest="100">
+                            <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                                <Label Text="&#x1F465;" FontSize="28" HorizontalOptions="Center"/>
+                                <Label x:Name="GroupCountLabel" Text="0 &#x05E7;&#x05D1;&#x05D5;&#x05E6;&#x05D5;&#x05EA;"
+                                       FontSize="14" FontAttributes="Bold"
+                                       TextColor="#181c1e" HorizontalOptions="Center"/>
+                                <Label x:Name="GroupSubLabel" Text=""
+                                       FontSize="11" TextColor="#737785"
+                                       HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </HorizontalStackLayout>
+                </ScrollView>
 
-            </Grid>
-        </VerticalStackLayout>
-    </ScrollView>
+                <!-- ── Quick Actions ── -->
+                <Label Text="&#x05E4;&#x05E2;&#x05D5;&#x05DC;&#x05D5;&#x05EA; &#x05DE;&#x05D4;&#x05D9;&#x05E8;&#x05D5;&#x05EA;"
+                       FontSize="18" FontAttributes="Bold" TextColor="#181c1e"
+                       HorizontalOptions="End" Margin="0,0,4,12"/>
+
+                <Grid ColumnDefinitions="*,12,*" RowDefinitions="Auto,16,Auto"
+                      Margin="0,0,0,24">
+
+                    <!-- Tasks card -->
+                    <Frame Grid.Row="0" Grid.Column="0"
+                           BackgroundColor="White" CornerRadius="18"
+                           Padding="20,22" BorderColor="Transparent"
+                           HasShadow="True">
+                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Label Text="&#x1F4DD;" FontSize="36" HorizontalOptions="Center"/>
+                            <Label Text="&#x05DE;&#x05E9;&#x05D9;&#x05DE;&#x05D5;&#x05EA; &#x05E9;&#x05DC;&#x05D9;"
+                                   FontSize="15" FontAttributes="Bold"
+                                   TextColor="#181c1e" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnTasksClicked"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- Groups card -->
+                    <Frame Grid.Row="0" Grid.Column="2"
+                           BackgroundColor="White" CornerRadius="18"
+                           Padding="20,22" BorderColor="Transparent"
+                           HasShadow="True">
+                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Label Text="&#x1F465;" FontSize="36" HorizontalOptions="Center"/>
+                            <Label Text="&#x05E7;&#x05D1;&#x05D5;&#x05E6;&#x05D5;&#x05EA; &#x05DC;&#x05D9;&#x05DE;&#x05D5;&#x05D3;"
+                                   FontSize="15" FontAttributes="Bold"
+                                   TextColor="#181c1e" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnGroupsClicked"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- Schedule card -->
+                    <Frame Grid.Row="2" Grid.Column="0"
+                           BackgroundColor="White" CornerRadius="18"
+                           Padding="20,22" BorderColor="Transparent"
+                           HasShadow="True">
+                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Label Text="&#x1F4C5;" FontSize="36" HorizontalOptions="Center"/>
+                            <Label Text="&#x05DC;&#x05D5;&#x05D7; &#x05E9;&#x05E0;&#x05D4;"
+                                   FontSize="15" FontAttributes="Bold"
+                                   TextColor="#181c1e" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnScheduleClicked"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <!-- Settings card -->
+                    <Frame Grid.Row="2" Grid.Column="2"
+                           BackgroundColor="White" CornerRadius="18"
+                           Padding="20,22" BorderColor="Transparent"
+                           HasShadow="True">
+                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Label Text="&#x2699;&#xFE0F;" FontSize="36" HorizontalOptions="Center"/>
+                            <Label Text="&#x05D4;&#x05D2;&#x05D3;&#x05E8;&#x05D5;&#x05EA;"
+                                   FontSize="15" FontAttributes="Bold"
+                                   TextColor="#181c1e" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <!-- ── Upcoming section ── -->
+                <Label Text="&#x05DE;&#x05E9;&#x05D9;&#x05DE;&#x05D5;&#x05EA; &#x05E7;&#x05E8;&#x05D5;&#x05D1;&#x05D5;&#x05EA;"
+                       FontSize="18" FontAttributes="Bold" TextColor="#181c1e"
+                       HorizontalOptions="End" Margin="0,0,4,12"/>
+
+                <CollectionView x:Name="UpcomingTasksCollection">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="12"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="White" CornerRadius="18" Padding="0"
+                                   BorderColor="Transparent" IsClippedToBounds="True"
+                                   HasShadow="True">
+                                <Grid ColumnDefinitions="6,*" HeightRequest="72">
+                                    <BoxView Grid.Column="0"
+                                             Color="{Binding PriorityColor}"
+                                             VerticalOptions="Fill"/>
+                                    <VerticalStackLayout Grid.Column="1" Padding="16,12"
+                                                         Spacing="4" VerticalOptions="Center">
+                                        <Label Text="{Binding Title}"
+                                               FontSize="15" FontAttributes="Bold"
+                                               TextColor="#181c1e"
+                                               HorizontalOptions="End" HorizontalTextAlignment="End"/>
+                                        <HorizontalStackLayout Spacing="12" HorizontalOptions="End">
+                                            <Label Text="{Binding Date}" FontSize="12"
+                                                   TextColor="#0040a1" FontAttributes="Bold"/>
+                                            <Label Text="{Binding Category}" FontSize="12"
+                                                   TextColor="#737785"/>
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <Label Text="&#x05D0;&#x05D9;&#x05DF; &#x05DE;&#x05E9;&#x05D9;&#x05DE;&#x05D5;&#x05EA; &#x05E7;&#x05E8;&#x05D5;&#x05D1;&#x05D5;&#x05EA; &#x1F389;"
+                               FontSize="15" TextColor="#737785"
+                               HorizontalOptions="Center" Margin="0,20,0,0"/>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ── Bottom Navigation Bar ─────────────────────────────────────────── -->
+        <Grid Grid.Row="2" BackgroundColor="#f7fafd"
+              ColumnDefinitions="*,*,*,*" Padding="0,8,0,0">
+            <!-- Home (active) -->
+            <Frame Grid.Column="0" BackgroundColor="#dae2ff" CornerRadius="16"
+                   Padding="0,6" BorderColor="Transparent" Margin="4,4">
+                <VerticalStackLayout Spacing="2"
+                                     HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="&#x1F3E0;" FontSize="22" HorizontalOptions="Center"/>
+                    <Label Text="&#x05D3;&#x05E3; &#x05D4;&#x05D1;&#x05D9;&#x05EA;"
+                           FontSize="10" TextColor="#0040a1"
+                           FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+            <!-- Tasks -->
+            <VerticalStackLayout Grid.Column="1" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="&#x2705;" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="&#x05DE;&#x05E9;&#x05D9;&#x05DE;&#x05D5;&#x05EA;"
+                       FontSize="10" TextColor="#424654" HorizontalOptions="Center"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTasksClicked"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <!-- Groups -->
+            <VerticalStackLayout Grid.Column="2" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="&#x1F465;" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="&#x05E7;&#x05D1;&#x05D5;&#x05E6;&#x05D5;&#x05EA;"
+                       FontSize="10" TextColor="#424654" HorizontalOptions="Center"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnGroupsClicked"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <!-- Calendar -->
+            <VerticalStackLayout Grid.Column="3" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="&#x1F4C5;" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="&#x05DC;&#x05D5;&#x05D7; &#x05E9;&#x05E0;&#x05D4;"
+                       FontSize="10" TextColor="#424654" HorizontalOptions="Center"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCalendarNavTapped"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+        </Grid>
+
+    </Grid>
 </ContentPage>

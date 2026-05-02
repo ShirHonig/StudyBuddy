@@ -50,24 +50,12 @@ public partial class SignInPage : ContentPage
         RegisterButton.IsEnabled = false;
         RegisterButton.Text      = "יוצר חשבון...";
 
-        var ctx = SynchronizationContext.Current;
-
         try
         {
             await Task.Run(() => _auth.RegisterAsync(email!, password, fullName!, username!));
 
-            // Insert MainPage before SignInPage, then pop SignInPage.
-            // Stack becomes [LoginPage → MainPage] so back goes to login, not registration.
-            void Navigate()
-            {
-                Navigation.InsertPageBefore(new MainPage(), this);
-                Navigation.PopAsync();
-            }
-
-            if (ctx != null)
-                ctx.Post(_ => Navigate(), null);
-            else
-                Navigate();
+            // Set MainPage as the new root
+            Application.Current!.MainPage = new NavigationPage(new MainPage());
         }
         catch (Exception ex)
         {

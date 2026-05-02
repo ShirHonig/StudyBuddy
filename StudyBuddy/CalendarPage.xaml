@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.CalendarPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#f7fafd">
+
+    <Grid RowDefinitions="64,*,76">
+
+        <!-- Top App Bar -->
+        <Grid Grid.Row="0" BackgroundColor="#f7fafd" Padding="16,0"
+              ColumnDefinitions="Auto,*,Auto">
+            <Border Grid.Column="0" WidthRequest="34" HeightRequest="34"
+                    BackgroundColor="#96a5ff" StrokeThickness="0"
+                    StrokeShape="RoundRectangle 17" VerticalOptions="Center">
+                <Label x:Name="AvatarLabel" Text="?" TextColor="#27378a"
+                       FontAttributes="Bold" FontSize="14"
+                       HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Border>
+            <Label Grid.Column="1" Text="לוח שנה"
+                   FontSize="20" FontAttributes="Bold" TextColor="#0040a1"
+                   HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- Scrollable Body -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="24" Padding="16,24,16,16">
+
+                <!-- Calendar Card -->
+                <Border BackgroundColor="#ffffff" StrokeThickness="0"
+                        StrokeShape="RoundRectangle 18">
+                    <Border.Shadow>
+                        <Shadow Brush="#181c1e" Offset="0,4" Radius="24" Opacity="0.06"/>
+                    </Border.Shadow>
+                    <VerticalStackLayout Padding="20" Spacing="16">
+
+                        <!-- Month Navigation -->
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Border Grid.Column="0" WidthRequest="36" HeightRequest="36"
+                                    BackgroundColor="#f1f4f7" StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 18">
+                                <Label Text="&#x003E;" FontSize="16" TextColor="#737785"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnNextMonthTapped"/>
+                                </Border.GestureRecognizers>
+                            </Border>
+                            <Label Grid.Column="1" x:Name="MonthYearLabel" Text=""
+                                   FontSize="18" FontAttributes="Bold" TextColor="#181c1e"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Border Grid.Column="2" WidthRequest="36" HeightRequest="36"
+                                    BackgroundColor="#f1f4f7" StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 18">
+                                <Label Text="&#x003C;" FontSize="16" TextColor="#737785"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPrevMonthTapped"/>
+                                </Border.GestureRecognizers>
+                            </Border>
+                        </Grid>
+
+                        <!-- Day Names Header -->
+                        <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="4">
+                            <Label Grid.Column="6" Text="א" FontSize="13" FontAttributes="Bold"
+                                   TextColor="#737785" HorizontalOptions="Center"/>
+                            <Label Grid.Column="5" Text="ב" FontSize="13" FontAttributes="Bold"
+                                   TextColor="#737785" HorizontalOptions="Center"/>
+                            <Label Grid.Column="4" Text="ג" FontSize="13" FontAttributes="Bold"
+                                   TextColor="#737785" HorizontalOptions="Center"/>
+                            <Label Grid.Column="3" Text="ד" FontSize="13" FontAttributes="Bold"
+                                   TextColor="#737785" HorizontalOptions="Center"/>
+                            <Label Grid.Column="2" Text="ה" FontSize="13" FontAttributes="Bold"
+                                   TextColor="#737785" HorizontalOptions="Center"/>
+                            <Label Grid.Column="1" Text="ו" FontSize="13" FontAttributes="Bold"
+                                   TextColor="#737785" HorizontalOptions="Center"/>
+                            <Label Grid.Column="0" Text="ש" FontSize="13" FontAttributes="Bold"
+                                   TextColor="#737785" HorizontalOptions="Center"/>
+                        </Grid>
+
+                        <!-- Calendar Grid -->
+                        <Grid x:Name="CalendarGrid" ColumnDefinitions="*,*,*,*,*,*,*"
+                              RowDefinitions="40,40,40,40,40,40" ColumnSpacing="4" RowSpacing="4">
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Stats Row -->
+                <Grid ColumnDefinitions="*,16,*">
+                    <Border Grid.Column="0" BackgroundColor="#ffffff" StrokeThickness="0"
+                            StrokeShape="RoundRectangle 16">
+                        <Border.Shadow>
+                            <Shadow Brush="#181c1e" Offset="0,4" Radius="24" Opacity="0.06"/>
+                        </Border.Shadow>
+                        <Grid>
+                            <BoxView BackgroundColor="#dc2626" WidthRequest="4"
+                                     HorizontalOptions="End" VerticalOptions="Fill"/>
+                            <VerticalStackLayout Padding="20,18,24,18" Spacing="6"
+                                                 HorizontalOptions="End">
+                                <Label Text="משימות השבוע" FontSize="11"
+                                       FontAttributes="Bold" TextColor="#737785"
+                                       HorizontalOptions="End"/>
+                                <Label x:Name="TasksCountLabel" Text="0"
+                                       FontSize="28" FontAttributes="Bold" TextColor="#181c1e"
+                                       HorizontalOptions="End"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                    <Border Grid.Column="2" BackgroundColor="#ffffff" StrokeThickness="0"
+                            StrokeShape="RoundRectangle 16">
+                        <Border.Shadow>
+                            <Shadow Brush="#181c1e" Offset="0,4" Radius="24" Opacity="0.06"/>
+                        </Border.Shadow>
+                        <Grid>
+                            <BoxView BackgroundColor="#16a34a" WidthRequest="4"
+                                     HorizontalOptions="End" VerticalOptions="Fill"/>
+                            <VerticalStackLayout Padding="20,18,24,18" Spacing="6"
+                                                 HorizontalOptions="End">
+                                <Label Text="פגישות השבוע" FontSize="11"
+                                       FontAttributes="Bold" TextColor="#737785"
+                                       HorizontalOptions="End"/>
+                                <Label x:Name="MeetingsCountLabel" Text="0"
+                                       FontSize="28" FontAttributes="Bold" TextColor="#181c1e"
+                                       HorizontalOptions="End"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- Section Header -->
+                <Label Text="אירועים קרובים" FontSize="24" FontAttributes="Bold"
+                       TextColor="#181c1e" HorizontalOptions="End"
+                       Margin="0,8,0,0" LineHeight="1.2"/>
+
+                <!-- Loading Indicator -->
+                <ActivityIndicator x:Name="LoadingIndicator"
+                                   IsRunning="True" IsVisible="True"
+                                   Color="#0040a1" HeightRequest="40"/>
+
+                <!-- Empty State -->
+                <VerticalStackLayout x:Name="EmptyState" IsVisible="False"
+                                     Spacing="16" Margin="0,48,0,48">
+                    <Label Text="אין אירועים קרובים"
+                           FontSize="56" FontAttributes="Bold" TextColor="#181c1e"
+                           HorizontalOptions="Center" Opacity="0.15"/>
+                    <Label Text="הוסף משימות או הצטרף לקבוצות לימוד"
+                           FontSize="16" TextColor="#737785" LineHeight="1.5"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Events List -->
+                <CollectionView x:Name="EventsCollection" IsGrouped="True">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="16"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout Padding="0,24,0,12">
+                                <HorizontalStackLayout Spacing="12" HorizontalOptions="End">
+                                    <Label Text="{Binding DateDisplay}"
+                                           FontSize="18" FontAttributes="Bold"
+                                           TextColor="#0040a1" LineHeight="1.2"/>
+                                    <Border BackgroundColor="#96a5ff" StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 9999"
+                                            Padding="12,6">
+                                        <Label Text="{Binding DayName}"
+                                               FontSize="11" FontAttributes="Bold"
+                                               TextColor="#27378a"/>
+                                    </Border>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BackgroundColor="#ffffff" StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 16">
+                                <Border.Shadow>
+                                    <Shadow Brush="#181c1e" Offset="0,4" Radius="24" Opacity="0.06"/>
+                                </Border.Shadow>
+                                <Grid>
+                                    <BoxView BackgroundColor="{Binding AccentColor}"
+                                             WidthRequest="4" HorizontalOptions="End"/>
+                                    <Grid Padding="16,18,20,18" ColumnDefinitions="Auto,*">
+                                        <Border Grid.Column="0" WidthRequest="48" HeightRequest="48"
+                                                BackgroundColor="{Binding IconBg}" StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 24" VerticalOptions="Center">
+                                            <Label Text="{Binding Icon}" FontSize="20"
+                                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        </Border>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="6"
+                                                             VerticalOptions="Center" Margin="16,0,0,0">
+                                            <Label Text="{Binding Title}"
+                                                   FontSize="16" FontAttributes="Bold"
+                                                   TextColor="#181c1e" HorizontalOptions="End"
+                                                   HorizontalTextAlignment="End" LineHeight="1.2"/>
+                                            <HorizontalStackLayout Spacing="12" HorizontalOptions="End">
+                                                <Label Text="{Binding TimeDisplay}"
+                                                       FontSize="13" TextColor="#0040a1"
+                                                       FontAttributes="Bold" LineHeight="1.5"
+                                                       IsVisible="{Binding HasTime}"/>
+                                                <Label Text="{Binding Subtitle}"
+                                                       FontSize="13" TextColor="#737785"
+                                                       LineHeight="1.5"/>
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <BoxView HeightRequest="16"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Bottom Navigation Bar -->
+        <Grid Grid.Row="2" BackgroundColor="#f7fafd"
+              ColumnDefinitions="*,*,*,*" Padding="0,8,0,0">
+            <VerticalStackLayout Grid.Column="0" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="&#x1F3E0;" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="דף הבית" FontSize="10" TextColor="#424654"
+                       HorizontalOptions="Center"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHomeNavTapped"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="1" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="&#x2705;" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="משימות" FontSize="10" TextColor="#424654"
+                       HorizontalOptions="Center"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTasksNavTapped"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="2" Spacing="2"
+                                 HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="&#x1F465;" FontSize="22" HorizontalOptions="Center"/>
+                <Label Text="קבוצות" FontSize="10" TextColor="#424654"
+                       HorizontalOptions="Center"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnGroupsNavTapped"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <Border Grid.Column="3" BackgroundColor="#dae2ff" StrokeThickness="0"
+                    StrokeShape="RoundRectangle 16" Padding="0,6" Margin="4,4">
+                <VerticalStackLayout Spacing="2"
+                                     HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="&#x1F4C5;" FontSize="22" HorizontalOptions="Center"/>
+                    <Label Text="לוח שנה" FontSize="10" TextColor="#0040a1"
+                           FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+    </Grid>
+</ContentPage>

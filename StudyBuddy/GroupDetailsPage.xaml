@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.GroupDetailsPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#f7fafd">
+
+    <Grid RowDefinitions="64,*,Auto">
+
+        <!-- Top App Bar with Glassmorphism effect -->
+        <Border Grid.Row="0" BackgroundColor="#f7fafd" StrokeThickness="0">
+            <Grid Padding="16,0" ColumnDefinitions="Auto,*,Auto">
+                <Label Grid.Column="0" Text="&#x2192;" FontSize="24" TextColor="#0040a1"
+                       FontAttributes="Bold" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Grid.Column="1" Text="פרטי קבוצה"
+                       FontSize="20" FontAttributes="Bold" TextColor="#0040a1"
+                       HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Scrollable Body -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="24" Padding="16,24,16,24">
+
+                <!-- Hero Card with Subject Accent Bar -->
+                <Border BackgroundColor="#ffffff" StrokeThickness="0"
+                        StrokeShape="RoundRectangle 16">
+                    <Border.Shadow>
+                        <Shadow Brush="#181c1e" Offset="0,4" Radius="24" Opacity="0.06"/>
+                    </Border.Shadow>
+                    <Grid>
+                        <!-- Right accent bar for subject color -->
+                        <BoxView x:Name="SubjectAccent" WidthRequest="4"
+                                 HorizontalOptions="End" VerticalOptions="Fill"
+                                 BackgroundColor="#0040a1"/>
+                        <VerticalStackLayout Padding="20,24,24,24" Spacing="12">
+                            <!-- Subject Chip -->
+                            <Border x:Name="SubjectChip" BackgroundColor="#96a5ff"
+                                    StrokeThickness="0" StrokeShape="RoundRectangle 9999"
+                                    Padding="14,6" HorizontalOptions="End">
+                                <Label x:Name="SubjectLabel" Text=""
+                                       FontSize="12" FontAttributes="Bold"
+                                       TextColor="#27378a"/>
+                            </Border>
+                            <!-- Title -->
+                            <Label x:Name="TitleLabel" Text=""
+                                   FontSize="24" FontAttributes="Bold" TextColor="#181c1e"
+                                   HorizontalOptions="End" HorizontalTextAlignment="End"
+                                   LineHeight="1.2"/>
+                            <!-- Description -->
+                            <Label x:Name="DescriptionLabel" Text=""
+                                   FontSize="15" TextColor="#424654" LineHeight="1.5"
+                                   HorizontalOptions="End" HorizontalTextAlignment="End"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- Meeting Date Card -->
+                <Border BackgroundColor="#ffffff" StrokeThickness="0"
+                        StrokeShape="RoundRectangle 16">
+                    <Border.Shadow>
+                        <Shadow Brush="#181c1e" Offset="0,4" Radius="24" Opacity="0.06"/>
+                    </Border.Shadow>
+                    <Grid Padding="20" ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Grid.Column="0" Spacing="4"
+                                             VerticalOptions="Center" HorizontalOptions="End">
+                            <Label Text="הפגישה הבאה" FontSize="13" TextColor="#737785"
+                                   HorizontalOptions="End"/>
+                            <Label x:Name="MeetingDateLabel" Text=""
+                                   FontSize="18" FontAttributes="Bold" TextColor="#0040a1"
+                                   HorizontalOptions="End"/>
+                        </VerticalStackLayout>
+                        <Border Grid.Column="1" WidthRequest="52" HeightRequest="52"
+                                BackgroundColor="#dae2ff" StrokeThickness="0"
+                                StrokeShape="RoundRectangle 26" Margin="16,0,0,0">
+                            <Label Text="&#x1F4C5;" FontSize="24"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Owner Section -->
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="יוצר הקבוצה" FontSize="18" FontAttributes="Bold"
+                           TextColor="#181c1e" HorizontalOptions="End"/>
+
+                    <Border BackgroundColor="#ffffff" StrokeThickness="0"
+                            StrokeShape="RoundRectangle 16">
+                        <Border.Shadow>
+                            <Shadow Brush="#181c1e" Offset="0,4" Radius="24" Opacity="0.06"/>
+                        </Border.Shadow>
+                        <Grid Padding="20" ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="6"
+                                                 VerticalOptions="Center" HorizontalOptions="End">
+                                <Label x:Name="OwnerNameLabel" Text=""
+                                       FontSize="17" FontAttributes="Bold" TextColor="#181c1e"
+                                       HorizontalOptions="End"/>
+                                <HorizontalStackLayout Spacing="6" HorizontalOptions="End">
+                                    <Label x:Name="OwnerEmailLabel" Text=""
+                                           FontSize="13" TextColor="#0040a1"
+                                           TextDecorations="Underline">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnOwnerEmailTapped"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label Text="&#x2709;" FontSize="14" TextColor="#0040a1"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                            <Border x:Name="OwnerAvatar" Grid.Column="1"
+                                    WidthRequest="56" HeightRequest="56"
+                                    StrokeThickness="0" StrokeShape="RoundRectangle 28"
+                                    Margin="16,0,0,0">
+                                <Label x:Name="OwnerInitialLabel" Text=""
+                                       FontAttributes="Bold" FontSize="20"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Members Section -->
+                <VerticalStackLayout Spacing="16">
+                    <HorizontalStackLayout Spacing="8" HorizontalOptions="End">
+                        <Label x:Name="MemberCountLabel" Text="" FontSize="14"
+                               TextColor="#737785" VerticalOptions="Center"/>
+                        <Label Text="חברי הקבוצה" FontSize="18" FontAttributes="Bold"
+                               TextColor="#181c1e"/>
+                    </HorizontalStackLayout>
+
+                    <CollectionView x:Name="MembersCollection">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="12"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="#ffffff" StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 14">
+                                    <Border.Shadow>
+                                        <Shadow Brush="#181c1e" Offset="0,2" Radius="16" Opacity="0.04"/>
+                                    </Border.Shadow>
+                                    <Grid Padding="16" ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="4"
+                                                             VerticalOptions="Center" HorizontalOptions="End">
+                                            <Label Text="{Binding Name}" FontSize="15"
+                                                   FontAttributes="Bold" TextColor="#181c1e"
+                                                   HorizontalOptions="End"/>
+                                            <Label Text="{Binding Email}" FontSize="12"
+                                                   TextColor="#0040a1" HorizontalOptions="End"
+                                                   TextDecorations="Underline">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer
+                                                        CommandParameter="{Binding Email}"
+                                                        Tapped="OnEmailTapped"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </VerticalStackLayout>
+                                        <Border Grid.Column="1" WidthRequest="44" HeightRequest="44"
+                                                BackgroundColor="{Binding AvatarBg}" StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 22" Margin="12,0,0,0">
+                                            <Label Text="{Binding Initial}"
+                                                   TextColor="{Binding AvatarFg}"
+                                                   FontAttributes="Bold" FontSize="16"
+                                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <!-- Spacer for bottom button -->
+                <BoxView HeightRequest="80"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Fixed Bottom Area -->
+        <Border x:Name="JoinButtonContainer" Grid.Row="2" BackgroundColor="#f7fafd"
+                StrokeThickness="0" Padding="16,12,16,24">
+            <Button x:Name="JoinButton" Text="הצטרפות לקבוצה"
+                    BackgroundColor="#0040a1" TextColor="#ffffff"
+                    CornerRadius="24" HeightRequest="56"
+                    FontSize="17" FontAttributes="Bold"
+                    Clicked="OnJoinClicked">
+                <Button.Shadow>
+                    <Shadow Brush="#0040a1" Offset="0,4" Radius="16" Opacity="0.3"/>
+                </Button.Shadow>
+            </Button>
+        </Border>
+
+        <Border x:Name="MemberBadge" Grid.Row="2" BackgroundColor="#f7fafd"
+                StrokeThickness="0" Padding="16,12,16,24" IsVisible="False">
+            <Border BackgroundColor="#e8f5e9" StrokeThickness="0"
+                    StrokeShape="RoundRectangle 24" Padding="24,16"
+                    HorizontalOptions="Center" VerticalOptions="Center">
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="את/ה חבר/ה בקבוצה זו" FontSize="15"
+                           FontAttributes="Bold" TextColor="#2e7d32"/>
+                    <Label Text="&#x2714;" FontSize="16" TextColor="#2e7d32"/>
+                </HorizontalStackLayout>
+            </Border>
+        </Border>
+
+    </Grid>
+</ContentPage>

@@ -11,6 +11,7 @@ public partial class TasksPage : ContentPage
     private readonly TaskFirestoreService _taskService = new();
 
     public ObservableCollection<TaskItem> AllTasks { get; set; }
+    private string _searchQuery = "";
 
     public TasksPage()
     {
@@ -74,7 +75,8 @@ public partial class TasksPage : ContentPage
 
     private void RefreshSortedList()
     {
-        var sorted = AllTasks
+        var items = ApplySearch(AllTasks);
+        var sorted = items
             .OrderBy(t => t.IsCompleted ? 1 : 0)
             .ThenBy(t => t.PrioritySortOrder)
             .ThenBy(t => t.ParsedDate)
@@ -84,12 +86,23 @@ public partial class TasksPage : ContentPage
 
     private void DisplayFiltered(IEnumerable<TaskItem> items)
     {
-        var sorted = items
+        var searched = ApplySearch(items);
+        var sorted = searched
             .OrderBy(t => t.IsCompleted ? 1 : 0)
             .ThenBy(t => t.PrioritySortOrder)
             .ThenBy(t => t.ParsedDate)
             .ToList();
         TasksListView.ItemsSource = new ObservableCollection<TaskItem>(sorted);
+    }
+
+    private IEnumerable<TaskItem> ApplySearch(IEnumerable<TaskItem> items)
+    {
+        if (string.IsNullOrWhiteSpace(_searchQuery))
+            return items;
+        return items.Where(t =>
+            (t.Title?.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase) ?? false) ||
+            (t.Category?.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase) ?? false) ||
+            (t.TeacherName?.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase) ?? false));
     }
 
     private void UpdateStats()
@@ -100,11 +113,16 @@ public partial class TasksPage : ContentPage
         UrgentCountLabel.Text = AllTasks.Count(t => t.IsUrgent).ToString();
     }
 
+    // ==================== SEARCH ====================
+
+    private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+    {
+        _searchQuery = e.NewTextValue ?? "";
+        RefreshSortedList();
+    }
+
     // ==================== STAT CARD HIGHLIGHT ====================
 
-    /// <summary>
-    /// Sets a white border on the selected stat card and clears the others.
-    /// </summary>
     private void HighlightStatCard(Frame selectedFrame)
     {
         StatTotalFrame.BorderColor = Colors.Transparent;
@@ -117,21 +135,16 @@ public partial class TasksPage : ContentPage
 
     // ==================== TAB HIGHLIGHT ====================
 
-    /// <summary>
-    /// Sets the purple active style on the selected tab button and resets the others.
-    /// </summary>
     private void HighlightTab(Button selectedButton)
     {
-        // Reset all tabs
-        TabAllButton.BackgroundColor = Color.FromArgb("#f3f0ff");
-        TabAllButton.TextColor = Color.FromArgb("#9333ea");
-        TabTodayButton.BackgroundColor = Color.FromArgb("#f3f0ff");
-        TabTodayButton.TextColor = Color.FromArgb("#9333ea");
-        TabWeekButton.BackgroundColor = Color.FromArgb("#f3f0ff");
-        TabWeekButton.TextColor = Color.FromArgb("#9333ea");
+        TabAllButton.BackgroundColor = Color.FromArgb("#e5e8eb");
+        TabAllButton.TextColor = Color.FromArgb("#424654");
+        TabTodayButton.BackgroundColor = Color.FromArgb("#e5e8eb");
+        TabTodayButton.TextColor = Color.FromArgb("#424654");
+        TabWeekButton.BackgroundColor = Color.FromArgb("#e5e8eb");
+        TabWeekButton.TextColor = Color.FromArgb("#424654");
 
-        // Highlight selected
-        selectedButton.BackgroundColor = Color.FromArgb("#9333ea");
+        selectedButton.BackgroundColor = Color.FromArgb("#0040a1");
         selectedButton.TextColor = Colors.White;
     }
 
@@ -267,8 +280,18 @@ public partial class TasksPage : ContentPage
         await Navigation.PushAsync(new AddTaskPage());
     }
 
-    private async void OnBackClicked(object sender, EventArgs e)
+    private async void OnHomeNavTapped(object sender, EventArgs e)
     {
-        await Navigation.PopAsync();
+        await Navigation.PopToRootAsync();
+    }
+
+    private async void OnGroupsNavTapped(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new GroupsPage());
+    }
+
+    private async void OnCalendarNavTapped(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new CalendarPage());
     }
 }

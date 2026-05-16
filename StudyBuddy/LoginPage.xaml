@@ -40,6 +40,7 @@
                 <Label Text="ללמוד חכם יותר, ביחד"
                        FontSize="16" TextColor="#424654"
                        HorizontalOptions="Center"/>
+
             </VerticalStackLayout>
 
             <!-- ── Login Card ── -->
@@ -91,18 +92,10 @@
 
                         <!-- Password Field -->
                         <VerticalStackLayout Spacing="8">
-                            <Grid ColumnDefinitions="Auto,*">
-                                <Label Grid.Column="0"
-                                       Text="שכחתי סיסמה?"
-                                       FontSize="12" FontAttributes="Bold"
-                                       TextColor="#0040a1"
-                                       HorizontalOptions="Start"/>
-                                <Label Grid.Column="1"
-                                       Text="סיסמה"
-                                       FontSize="13" FontAttributes="Bold"
-                                       TextColor="#424654"
-                                       HorizontalOptions="End"/>
-                            </Grid>
+                            <Label Text="סיסמה"
+                                   FontSize="13" FontAttributes="Bold"
+                                   TextColor="#424654"
+                                   HorizontalOptions="End"/>
                             <Border BackgroundColor="#e5e8eb"
                                     StrokeThickness="0" Padding="0">
                                 <Border.StrokeShape>
@@ -131,7 +124,7 @@
 
                         <!-- Login Button -->
                         <Button x:Name="LoginButton"
-                                Text="← התחברות"
+                                Text="התחברות"
                                 Clicked="OnLoginClicked"
                                 HeightRequest="56"
                                 FontSize="17"
@@ -162,7 +155,7 @@
                         <TapGestureRecognizer Tapped="OnSignInTapped"/>
                     </Label.GestureRecognizers>
                 </Label>
-                <Label Text="?עוד לא חבר"
+                <Label Text="?עוד לא חברים"
                        TextColor="#424654"
                        FontSize="15"/>
             </HorizontalStackLayout>

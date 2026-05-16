@@ -28,7 +28,10 @@ public partial class LoginPage : ContentPage
         try
         {
             await _auth.LoginAsync(email, password);
-            Application.Current!.MainPage = new NavigationPage(new MainPage());
+            if (Application.Current?.Windows.Count > 0)
+            {
+                Application.Current.Windows[0].Page = new NavigationPage(new MainPage());
+            }
         }
         catch (Exception ex)
         {
@@ -37,7 +40,7 @@ public partial class LoginPage : ContentPage
         finally
         {
             LoginButton.IsEnabled = true;
-            LoginButton.Text      = "← התחברות";
+            LoginButton.Text      = "התחברות";
         }
     }
 
@@ -48,7 +51,6 @@ public partial class LoginPage : ContentPage
 
     private void OnSecretLoginTapped(object sender, EventArgs e)
     {
-        Application.Current!.MainPage = new NavigationPage(new MainPage());
+        Application.Current!.Windows[0].Page = new NavigationPage(new MainPage());
     }
-
 }

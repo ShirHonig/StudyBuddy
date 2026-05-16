@@ -5,33 +5,6 @@ using StudyBuddy.Services;
 
 namespace StudyBuddy;
 
-public class CalendarEvent
-{
-    public string Title { get; set; } = "";
-    public string Subtitle { get; set; } = "";
-    public string TimeDisplay { get; set; } = "";
-    public bool HasTime { get; set; }
-    public string Icon { get; set; } = "";
-    public Color IconBg { get; set; } = Colors.LightGray;
-    public Color AccentColor { get; set; } = Colors.Gray;
-    public DateTime Date { get; set; }
-    public string EventType { get; set; } = "task"; // "task" or "meeting"
-}
-
-public class CalendarDateGroup : ObservableCollection<CalendarEvent>
-{
-    public DateTime Date { get; set; }
-    public string DateDisplay { get; set; } = "";
-    public string DayName { get; set; } = "";
-
-    public CalendarDateGroup(DateTime date, IEnumerable<CalendarEvent> events) : base(events)
-    {
-        Date = date;
-        DateDisplay = date.ToString("dd/MM");
-        DayName = date.ToString("dddd", new CultureInfo("he-IL"));
-    }
-}
-
 public partial class CalendarPage : ContentPage
 {
     private static readonly CultureInfo HebrewCulture = new("he-IL");

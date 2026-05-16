@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using StudyBuddy.Models;
 
 namespace StudyBuddy;
 
@@ -24,9 +25,8 @@ public partial class GroupDetailsPage : ContentPage
         SubjectChip.BackgroundColor = _group.SubjectColor.WithAlpha(0.25f);
         SubjectLabel.TextColor = _group.SubjectColor;
 
-        // Title & Description
+        // Title
         TitleLabel.Text = _group.Title;
-        DescriptionLabel.Text = _group.Description;
 
         // Meeting Date
         MeetingDateLabel.Text = _group.NextMeeting.ToString("dd/MM/yyyy HH:mm");

@@ -1,3 +1,5 @@
+using StudyBuddy.Models;
+
 namespace StudyBuddy;
 
 public partial class CreateGroupPage : ContentPage
@@ -99,7 +101,7 @@ public partial class CreateGroupPage : ContentPage
                 Subject        = _selectedSubject,
                 SubjectColor   = Color.FromArgb(_selectedColor),
                 Title          = name,
-                Description    = DescriptionEditor.Text?.Trim() ?? "",
+                Description    = "",
                 CreatorUid     = Services.UserSession.Uid,
                 CreatorEmail   = Services.UserSession.Email,
                 CreatorInitial = fullName.Length > 0 ? fullName[0].ToString() : "?",

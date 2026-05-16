@@ -51,11 +51,7 @@
                                    FontSize="24" FontAttributes="Bold" TextColor="#181c1e"
                                    HorizontalOptions="End" HorizontalTextAlignment="End"
                                    LineHeight="1.2"/>
-                            <!-- Description -->
-                            <Label x:Name="DescriptionLabel" Text=""
-                                   FontSize="15" TextColor="#424654" LineHeight="1.5"
-                                   HorizontalOptions="End" HorizontalTextAlignment="End"/>
-                        </VerticalStackLayout>
+                                                    </VerticalStackLayout>
                     </Grid>
                 </Border>
 

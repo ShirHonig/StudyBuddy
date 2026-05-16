@@ -23,8 +23,8 @@
 
             <!-- ── Branding ── -->
             <VerticalStackLayout Spacing="8" Padding="28,8,28,24" HorizontalOptions="Center">
-                <Label Text="StudyBuddy"
-                       FontSize="30" FontAttributes="Bold"
+                <Label Text="Study Buddy"
+                       FontSize="28" FontAttributes="Bold"
                        TextColor="#0040a1"
                        HorizontalOptions="Center"/>
                 <Label Text="הצטרפו לקהילת הלומדים שלנו"

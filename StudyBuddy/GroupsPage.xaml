@@ -18,7 +18,7 @@
                        HorizontalOptions="Center" VerticalOptions="Center"/>
             </Frame>
             <!-- Title -->
-            <Label Grid.Column="1" Text="StudyBuddy"
+            <Label Grid.Column="1" Text="Study Buddy"
                    FontSize="20" FontAttributes="Bold" TextColor="#0040a1"
                    HorizontalOptions="Center" VerticalOptions="Center"/>
             <!-- Bell -->

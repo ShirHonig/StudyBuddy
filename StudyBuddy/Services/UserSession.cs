@@ -1,6 +1,5 @@
 namespace StudyBuddy.Services;
 
-/// <summary>Singleton that holds the currently signed-in user for the lifetime of the app.</summary>
 public static class UserSession
 {
     public static string Uid       { get; set; } = "default-user";

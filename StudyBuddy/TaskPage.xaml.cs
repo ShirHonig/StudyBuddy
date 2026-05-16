@@ -12,6 +12,7 @@ public partial class TasksPage : ContentPage
 
     public ObservableCollection<TaskItem> AllTasks { get; set; }
     private string _searchQuery = "";
+    private Func<IEnumerable<TaskItem>, IEnumerable<TaskItem>> _activeFilter = items => items;
 
     public TasksPage()
     {
@@ -20,7 +21,7 @@ public partial class TasksPage : ContentPage
         DateLabel.Text = DateTime.Now.ToString("dd/MM/yyyy, dddd", HebrewCulture);
         AllTasks = [];
 
-        RefreshSortedList();
+        ApplyCurrentFilters();
         UpdateStats();
         HighlightStatCard(StatTotalFrame);
     }
@@ -32,13 +33,13 @@ public partial class TasksPage : ContentPage
         MessagingCenter.Subscribe<AddTaskPage, TaskItem>(this, "TaskAdded", (sender, task) =>
         {
             AllTasks.Add(task);
-            RefreshSortedList();
+            ApplyCurrentFilters();
             UpdateStats();
         });
 
         MessagingCenter.Subscribe<AddTaskPage, TaskItem>(this, "TaskEdited", (sender, task) =>
         {
-            RefreshSortedList();
+            ApplyCurrentFilters();
             UpdateStats();
         });
 
@@ -61,7 +62,7 @@ public partial class TasksPage : ContentPage
             foreach (var task in tasks)
                 AllTasks.Add(task);
 
-            RefreshSortedList();
+            ApplyCurrentFilters();
             UpdateStats();
         }
         catch (Exception ex)
@@ -71,21 +72,9 @@ public partial class TasksPage : ContentPage
         }
     }
 
-    // ==================== SORTING ====================
-
-    private void RefreshSortedList()
+    private void ApplyCurrentFilters()
     {
-        var items = ApplySearch(AllTasks);
-        var sorted = items
-            .OrderBy(t => t.IsCompleted ? 1 : 0)
-            .ThenBy(t => t.PrioritySortOrder)
-            .ThenBy(t => t.ParsedDate)
-            .ToList();
-        TasksListView.ItemsSource = new ObservableCollection<TaskItem>(sorted);
-    }
-
-    private void DisplayFiltered(IEnumerable<TaskItem> items)
-    {
+        var items = _activeFilter(AllTasks);
         var searched = ApplySearch(items);
         var sorted = searched
             .OrderBy(t => t.IsCompleted ? 1 : 0)
@@ -113,15 +102,11 @@ public partial class TasksPage : ContentPage
         UrgentCountLabel.Text = AllTasks.Count(t => t.IsUrgent).ToString();
     }
 
-    // ==================== SEARCH ====================
-
     private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
     {
         _searchQuery = e.NewTextValue ?? "";
-        RefreshSortedList();
+        ApplyCurrentFilters();
     }
-
-    // ==================== STAT CARD HIGHLIGHT ====================
 
     private void HighlightStatCard(Frame selectedFrame)
     {
@@ -132,8 +117,6 @@ public partial class TasksPage : ContentPage
 
         selectedFrame.BorderColor = Colors.White;
     }
-
-    // ==================== TAB HIGHLIGHT ====================
 
     private void HighlightTab(Button selectedButton)
     {
@@ -148,8 +131,6 @@ public partial class TasksPage : ContentPage
         selectedButton.TextColor = Colors.White;
     }
 
-    // ==================== CHECKBOX (mark complete) ====================
-
     private async void OnCheckBoxChanged(object sender, CheckedChangedEventArgs e)
     {
         if (sender is CheckBox checkBox && checkBox.BindingContext is TaskItem task)
@@ -157,13 +138,11 @@ public partial class TasksPage : ContentPage
             task.IsCompleted = e.Value;
             task.Status = e.Value ? "הושלם" : "בתהליך";
 
-            RefreshSortedList();
+            ApplyCurrentFilters();
             UpdateStats();
             await _taskService.UpdateTaskAsync(task);
         }
     }
-
-    // ==================== TAP TO EDIT ====================
 
     private async void OnTaskCardTapped(object sender, EventArgs e)
     {
@@ -185,8 +164,6 @@ public partial class TasksPage : ContentPage
         if (wantToEdit)
             await Navigation.PushAsync(new AddTaskPage(task));
     }
-
-    // ==================== SWIPE ACTIONS ====================
 
     private async void OnSwipeEditInvoked(object sender, EventArgs e)
     {
@@ -220,60 +197,62 @@ public partial class TasksPage : ContentPage
         {
             await _taskService.DeleteTaskAsync(task.Id);
             AllTasks.Remove(task);
-            RefreshSortedList();
+            ApplyCurrentFilters();
             UpdateStats();
         }
     }
 
-    // ==================== STAT CARD TAPS (filter) ====================
-
     private void OnStatTotalTapped(object sender, EventArgs e)
     {
         HighlightStatCard(StatTotalFrame);
-        RefreshSortedList();
+        _activeFilter = items => items;
+        ApplyCurrentFilters();
     }
 
     private void OnStatInProgressTapped(object sender, EventArgs e)
     {
         HighlightStatCard(StatInProgressFrame);
-        DisplayFiltered(AllTasks.Where(t => !t.IsCompleted));
+        _activeFilter = items => items.Where(t => !t.IsCompleted);
+        ApplyCurrentFilters();
     }
 
     private void OnStatCompletedTapped(object sender, EventArgs e)
     {
         HighlightStatCard(StatCompletedFrame);
-        DisplayFiltered(AllTasks.Where(t => t.IsCompleted));
+        _activeFilter = items => items.Where(t => t.IsCompleted);
+        ApplyCurrentFilters();
     }
 
     private void OnStatUrgentTapped(object sender, EventArgs e)
     {
         HighlightStatCard(StatUrgentFrame);
-        DisplayFiltered(AllTasks.Where(t => t.IsUrgent));
+        _activeFilter = items => items.Where(t => t.IsUrgent);
+        ApplyCurrentFilters();
     }
-
-    // ==================== TAB FILTERS ====================
 
     private void OnTabAllClicked(object sender, EventArgs e)
     {
         HighlightTab(TabAllButton);
-        RefreshSortedList();
+        _activeFilter = items => items;
+        ApplyCurrentFilters();
+        HighlightStatCard(StatTotalFrame);
     }
 
     private void OnTabTodayClicked(object sender, EventArgs e)
     {
         HighlightTab(TabTodayButton);
         string today = DateTime.Now.ToString("dd/MM/yyyy");
-        DisplayFiltered(AllTasks.Where(t => t.Date == today));
+        _activeFilter = items => items.Where(t => t.Date == today);
+        ApplyCurrentFilters();
     }
 
     private void OnTabWeekClicked(object sender, EventArgs e)
     {
         HighlightTab(TabWeekButton);
         DateTime weekFromNow = DateTime.Now.AddDays(7);
-        DisplayFiltered(AllTasks.Where(t => t.ParsedDate <= weekFromNow));
+        _activeFilter = items => items.Where(t => t.ParsedDate <= weekFromNow);
+        ApplyCurrentFilters();
     }
-
-    // ==================== NAVIGATION ====================
 
     private async void OnAddTaskClicked(object sender, EventArgs e)
     {

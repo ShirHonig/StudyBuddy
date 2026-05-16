@@ -14,7 +14,7 @@ public class TaskFirestoreService
 
     private static readonly HttpClient Http = new();
     private static readonly System.Text.Json.JsonSerializerOptions JsonOpts =
-        new(System.Text.Json.JsonSerializerDefaults.General); // PascalCase, no camelCase
+        new(System.Text.Json.JsonSerializerDefaults.General);
 
     private static HttpRequestMessage AuthedRequest(HttpMethod method, string url)
     {
@@ -24,8 +24,6 @@ public class TaskFirestoreService
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", UserSession.IdToken);
         return req;
     }
-
-    // ── REST: Write ──────────────────────────────────────────────────────────
 
     public async Task<string> AddTaskAsync(TaskItem task)
     {
@@ -38,8 +36,6 @@ public class TaskFirestoreService
         System.Diagnostics.Debug.WriteLine($"[Firebase REST] POST status={response.StatusCode} body={json}");
         response.EnsureSuccessStatusCode();
 
-        // Extract the auto-generated document ID from the response name field
-        // name = "projects/.../documents/users/default-user/tasks/{id}"
         using var doc = JsonDocument.Parse(json);
         var name = doc.RootElement.GetProperty("name").GetString() ?? string.Empty;
         return name.Split('/').Last();
@@ -69,8 +65,6 @@ public class TaskFirestoreService
         System.Diagnostics.Debug.WriteLine($"[Firebase REST] DELETE status={response.StatusCode}");
     }
 
-    // ── REST: Read ───────────────────────────────────────────────────────────
-
     public async Task<List<TaskItem>> GetTasksAsync()
     {
         var req = AuthedRequest(HttpMethod.Get, $"{BaseUrl}?key={ApiKey}");
@@ -93,8 +87,6 @@ public class TaskFirestoreService
         return tasks;
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
     private static object ToRestDocument(TaskItem task) => new
     {
         fields = new
@@ -116,22 +108,20 @@ public class TaskFirestoreService
     {
         var item = new TaskItem();
 
-        // Extract document ID from name
         if (doc.TryGetProperty("name", out var nameProp))
             item.Id = nameProp.GetString()?.Split('/').Last() ?? "";
 
         if (!doc.TryGetProperty("fields", out var fields))
             return item;
 
-        // Try PascalCase first (new documents), fall back to camelCase (old documents)
-        item.Title        = GetString(fields, "Title")        ?? GetString(fields, "title");
-        item.Description  = GetString(fields, "Description")  ?? GetString(fields, "description");
-        item.Category     = GetString(fields, "Category")     ?? GetString(fields, "category");
-        item.CategoryColor= GetString(fields, "CategoryColor")?? GetString(fields, "categoryColor");
-        item.Date         = GetString(fields, "Date")         ?? GetString(fields, "date");
-        item.TeacherName  = GetString(fields, "TeacherName")  ?? GetString(fields, "teacherName");
-        item.Status       = GetString(fields, "Status")       ?? GetString(fields, "status");
-        item.Priority     = GetString(fields, "Priority")     ?? GetString(fields, "priority");
+        item.Title         = GetString(fields, "Title")         ?? GetString(fields, "title") ?? string.Empty;
+        item.Description   = GetString(fields, "Description")   ?? GetString(fields, "description") ?? string.Empty;
+        item.Category      = GetString(fields, "Category")      ?? GetString(fields, "category") ?? string.Empty;
+        item.CategoryColor = GetString(fields, "CategoryColor") ?? GetString(fields, "categoryColor") ?? string.Empty;
+        item.Date          = GetString(fields, "Date")          ?? GetString(fields, "date") ?? string.Empty;
+        item.TeacherName   = GetString(fields, "TeacherName")   ?? GetString(fields, "teacherName") ?? string.Empty;
+        item.Status        = GetString(fields, "Status")        ?? GetString(fields, "status") ?? string.Empty;
+        item.Priority      = GetString(fields, "Priority")      ?? GetString(fields, "priority") ?? string.Empty;
         item.IsCompleted  = GetBool(fields, "IsCompleted")    || GetBool(fields, "isCompleted");
         item.IsUrgent     = GetBool(fields, "IsUrgent")       || GetBool(fields, "isUrgent");
 

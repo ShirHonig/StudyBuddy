@@ -357,20 +357,7 @@
                 </Border>
                 <Label Text="" Margin="0,0,0,24"/>
 
-                <!-- ── Description ── -->
-                <Label Text="תיאור הקבוצה" FontSize="11" FontAttributes="Bold"
-                       TextColor="#0040a1" HorizontalOptions="End" Margin="0,24,4,6"/>
-                <Border BackgroundColor="#e5e8eb" StrokeThickness="0" Margin="0,0,0,28">
-                    <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
-                    <Editor x:Name="DescriptionEditor"
-                            Placeholder="מה המטרה של הקבוצה? שתפו ועוד..."
-                            PlaceholderColor="#737785" TextColor="#181c1e"
-                            BackgroundColor="Transparent" FontSize="14"
-                            HorizontalTextAlignment="End"
-                            MinimumHeightRequest="100"
-                            Margin="12,8"/>
-                </Border>
-
+                
             </VerticalStackLayout>
         </ScrollView>
 

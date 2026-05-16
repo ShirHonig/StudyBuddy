@@ -17,7 +17,7 @@
                        FontAttributes="Bold" FontSize="14"
                        HorizontalOptions="Center" VerticalOptions="Center"/>
             </Frame>
-            <Label Grid.Column="1" Text="StudyBuddy"
+            <Label Grid.Column="1" Text="Study Buddy"
                    FontSize="20" FontAttributes="Bold" TextColor="#0040a1"
                    HorizontalOptions="Center" VerticalOptions="Center"/>
             <Label Grid.Column="2" Text="&#x1F514;" FontSize="20"
@@ -29,29 +29,51 @@
             <VerticalStackLayout Spacing="0" Padding="16,20,16,8">
 
                 <!-- Hero Header -->
-                <VerticalStackLayout Spacing="6" Margin="0,-8,0,8" HorizontalOptions="Center">
+                <Border StrokeThickness="0"
+                        Padding="20,22"
+                        Margin="0,-8,0,20">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#0D3B66" Offset="0.0"/>
+                            <GradientStop Color="#1D6F8C" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="28"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Spacing="8" Grid.Column="1" HorizontalOptions="End">
                     <Label x:Name="GreetingLabel" Text="&#x1F44B; ,&#x05D4;&#x05D9;&#x05D9;"
-                           FontSize="34" FontAttributes="Bold" TextColor="#0040a1"
-                           HorizontalOptions="Center" CharacterSpacing="-0.5">
+                           FontSize="30" FontAttributes="Bold" TextColor="#ffffff"
+                           HorizontalOptions="End" HorizontalTextAlignment="End" CharacterSpacing="-0.5">
                         <Label.Shadow>
-                            <Shadow Brush="#0040a1" Offset="0,3" Radius="12" Opacity="0.18"/>
+                            <Shadow Brush="#05263f" Offset="0,3" Radius="12" Opacity="0.2"/>
                         </Label.Shadow>
                     </Label>
                     <Label x:Name="SubtitleLabel" Text="&#x05DE;&#x05D4; &#x05DE;&#x05D7;&#x05DB;&#x05D4; &#x05DC;&#x05DA; &#x05D4;&#x05D9;&#x05D5;&#x05DD;?"
-                           FontSize="15" TextColor="#737785"
-                           HorizontalOptions="Center"/>
-                </VerticalStackLayout>
-
-                <!-- Date -->
-                <Label x:Name="DateLabel" FontSize="13" TextColor="#424654"
-                       HorizontalOptions="Center" Margin="0,0,0,24"/>
+                           FontSize="14" TextColor="#d7e9f3"
+                           HorizontalOptions="End" HorizontalTextAlignment="End"/>
+                            <Label x:Name="DateLabel" FontSize="13" TextColor="#b7d4e4"
+                                   HorizontalOptions="End"/>
+                        </VerticalStackLayout>
+                        <Border Grid.Column="0" BackgroundColor="#ffffff22"
+                                WidthRequest="64" HeightRequest="64"
+                                StrokeThickness="0" HorizontalOptions="Start">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="22"/>
+                            </Border.StrokeShape>
+                            <Label Text="📚" FontSize="30"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
 
                 <!-- ── Quick Stats Row ── -->
                 <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never"
                             Margin="0,0,0,24">
                     <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
                         <!-- Tasks stat -->
-                        <Frame BackgroundColor="White" CornerRadius="18" Padding="20,16"
+                        <Frame BackgroundColor="#ffffff" CornerRadius="22" Padding="20,16"
                                BorderColor="Transparent" HasShadow="True"
                                WidthRequest="155" HeightRequest="100">
                             <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
@@ -66,7 +88,7 @@
                         </Frame>
 
                         <!-- Groups stat -->
-                        <Frame BackgroundColor="White" CornerRadius="18" Padding="20,16"
+                        <Frame BackgroundColor="#ffffff" CornerRadius="22" Padding="20,16"
                                BorderColor="Transparent" HasShadow="True"
                                WidthRequest="155" HeightRequest="100">
                             <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
@@ -87,18 +109,18 @@
                        FontSize="18" FontAttributes="Bold" TextColor="#181c1e"
                        HorizontalOptions="End" Margin="0,0,4,12"/>
 
-                <Grid ColumnDefinitions="*,12,*" RowDefinitions="Auto,16,Auto"
+                <Grid ColumnDefinitions="*,10,*,10,*" RowDefinitions="Auto"
                       Margin="0,0,0,24">
 
                     <!-- Tasks card -->
-                    <Frame Grid.Row="0" Grid.Column="0"
+                    <Frame Grid.Column="0"
                            BackgroundColor="White" CornerRadius="18"
-                           Padding="20,22" BorderColor="Transparent"
+                           Padding="16,20" BorderColor="Transparent"
                            HasShadow="True">
-                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                            <Label Text="&#x1F4DD;" FontSize="36" HorizontalOptions="Center"/>
-                            <Label Text="&#x05DE;&#x05E9;&#x05D9;&#x05DE;&#x05D5;&#x05EA; &#x05E9;&#x05DC;&#x05D9;"
-                                   FontSize="15" FontAttributes="Bold"
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Label Text="&#x1F4DD;" FontSize="32" HorizontalOptions="Center"/>
+                            <Label Text="&#x05DE;&#x05E9;&#x05D9;&#x05DE;&#x05D5;&#x05EA;"
+                                   FontSize="13" FontAttributes="Bold"
                                    TextColor="#181c1e" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                         <Frame.GestureRecognizers>
@@ -107,14 +129,14 @@
                     </Frame>
 
                     <!-- Groups card -->
-                    <Frame Grid.Row="0" Grid.Column="2"
+                    <Frame Grid.Column="2"
                            BackgroundColor="White" CornerRadius="18"
-                           Padding="20,22" BorderColor="Transparent"
+                           Padding="16,20" BorderColor="Transparent"
                            HasShadow="True">
-                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                            <Label Text="&#x1F465;" FontSize="36" HorizontalOptions="Center"/>
-                            <Label Text="&#x05E7;&#x05D1;&#x05D5;&#x05E6;&#x05D5;&#x05EA; &#x05DC;&#x05D9;&#x05DE;&#x05D5;&#x05D3;"
-                                   FontSize="15" FontAttributes="Bold"
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Label Text="&#x1F465;" FontSize="32" HorizontalOptions="Center"/>
+                            <Label Text="&#x05E7;&#x05D1;&#x05D5;&#x05E6;&#x05D5;&#x05EA;"
+                                   FontSize="13" FontAttributes="Bold"
                                    TextColor="#181c1e" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                         <Frame.GestureRecognizers>
@@ -122,15 +144,15 @@
                         </Frame.GestureRecognizers>
                     </Frame>
 
-                    <!-- Schedule card -->
-                    <Frame Grid.Row="2" Grid.Column="0"
+                    <!-- Calendar card -->
+                    <Frame Grid.Column="4"
                            BackgroundColor="White" CornerRadius="18"
-                           Padding="20,22" BorderColor="Transparent"
+                           Padding="16,20" BorderColor="Transparent"
                            HasShadow="True">
-                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                            <Label Text="&#x1F4C5;" FontSize="36" HorizontalOptions="Center"/>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Label Text="&#x1F4C5;" FontSize="32" HorizontalOptions="Center"/>
                             <Label Text="&#x05DC;&#x05D5;&#x05D7; &#x05E9;&#x05E0;&#x05D4;"
-                                   FontSize="15" FontAttributes="Bold"
+                                   FontSize="13" FontAttributes="Bold"
                                    TextColor="#181c1e" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                         <Frame.GestureRecognizers>
@@ -138,18 +160,6 @@
                         </Frame.GestureRecognizers>
                     </Frame>
 
-                    <!-- Settings card -->
-                    <Frame Grid.Row="2" Grid.Column="2"
-                           BackgroundColor="White" CornerRadius="18"
-                           Padding="20,22" BorderColor="Transparent"
-                           HasShadow="True">
-                        <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                            <Label Text="&#x2699;&#xFE0F;" FontSize="36" HorizontalOptions="Center"/>
-                            <Label Text="&#x05D4;&#x05D2;&#x05D3;&#x05E8;&#x05D5;&#x05EA;"
-                                   FontSize="15" FontAttributes="Bold"
-                                   TextColor="#181c1e" HorizontalOptions="Center"/>
-                        </VerticalStackLayout>
-                    </Frame>
                 </Grid>
 
                 <!-- ── Upcoming section ── -->

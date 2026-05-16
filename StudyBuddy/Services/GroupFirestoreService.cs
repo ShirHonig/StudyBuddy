@@ -9,7 +9,6 @@ public class GroupFirestoreService
     private const string ProjectId = "studdybuddy-app522";
     private const string ApiKey    = "AIzaSyDRqnwE4RRuEmJOJaXWY4_mVhrX5g9Rl80";
 
-    // Top-level groups collection — visible to all users
     private const string BaseUrl = $"https://firestore.googleapis.com/v1/projects/{ProjectId}/databases/(default)/documents/groups";
 
     private static readonly HttpClient Http = new();
@@ -23,8 +22,6 @@ public class GroupFirestoreService
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", UserSession.IdToken);
         return req;
     }
-
-    // ── Create ────────────────────────────────────────────────────────────────
 
     public async Task<string> CreateGroupAsync(GroupItem group)
     {
@@ -41,8 +38,6 @@ public class GroupFirestoreService
         var name = doc.RootElement.GetProperty("name").GetString() ?? "";
         return name.Split('/').Last();
     }
-
-    // ── Get all groups ────────────────────────────────────────────────────────
 
     public async Task<List<GroupItem>> GetAllGroupsAsync()
     {
@@ -61,22 +56,16 @@ public class GroupFirestoreService
         return groups;
     }
 
-    // ── Get groups I'm a member of ────────────────────────────────────────────
-
     public async Task<List<GroupItem>> GetMyGroupsAsync()
     {
-        // Fetch all groups, then filter client-side for ones where current user is a member
         var all = await GetAllGroupsAsync();
         return all.Where(g => g.MembersList.Any(m => m.Uid == UserSession.Uid)).ToList();
     }
-
-    // ── Join (read → add uid → patch) ─────────────────────────────────────────
 
     public async Task JoinGroupAsync(GroupItem group)
     {
         var docUrl = $"{BaseUrl}/{group.Id}";
 
-        // 1. Read current members
         var getReq  = AuthedRequest(HttpMethod.Get, $"{docUrl}?key={ApiKey}");
         var getResp = await Http.SendAsync(getReq);
         var getJson = await getResp.Content.ReadAsStringAsync();
@@ -107,9 +96,8 @@ public class GroupFirestoreService
             }
         }
 
-        if (members.Any(m => m.Uid == UserSession.Uid)) return; // already a member
+        if (members.Any(m => m.Uid == UserSession.Uid)) return;
 
-        // Add current user
         members.Add(new MemberInfo
         {
             Uid   = UserSession.Uid,
@@ -117,7 +105,6 @@ public class GroupFirestoreService
             Name  = UserSession.FullName
         });
 
-        // 2. Patch the MembersList field
         var patch = new
         {
             fields = new
@@ -154,8 +141,6 @@ public class GroupFirestoreService
             throw new Exception($"Firebase JOIN {(int)resp.StatusCode}: {errJson[..Math.Min(150,errJson.Length)]}");
         }
     }
-
-    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private static object ToRestDoc(GroupItem g, string creatorUid) => new
     {
@@ -216,11 +201,9 @@ public class GroupFirestoreService
         if (DateTime.TryParse(meetingStr, out var dt))
             g.NextMeeting = dt;
 
-        // Avatar colors derived from subject color
         g.AvatarBg = Color.FromArgb(g.SubjectColorHex).WithAlpha(0.25f);
         g.AvatarFg = Color.FromArgb(g.SubjectColorHex);
 
-        // MembersList array (new format with MemberInfo objects)
         if (f.TryGetProperty("MembersList", out var memList) &&
             memList.TryGetProperty("arrayValue", out var arr) &&
             arr.TryGetProperty("values", out var vals))
@@ -243,7 +226,6 @@ public class GroupFirestoreService
             }
         }
 
-        // Backward compat: old Members array (just UIDs)
         if (g.MembersList.Count == 0 && f.TryGetProperty("Members", out var oldMem) &&
             oldMem.TryGetProperty("arrayValue", out var oldArr) &&
             oldArr.TryGetProperty("values", out var oldVals))

@@ -22,7 +22,7 @@ public partial class MainPage : ContentPage
             AvatarLabel.Text    = name[0].ToString();
         }
 
-        DateLabel.Text = DateTime.Now.ToString("dd/MM/yyyy, dddd", HebrewCulture);
+        DateLabel.Text = DateTime.Now.ToString("dddd, dd/MM/yyyy", HebrewCulture);
     }
 
     protected override async void OnAppearing()
@@ -41,7 +41,6 @@ public partial class MainPage : ContentPage
             TaskCountLabel.Text = $"{tasks.Count} משימות";
             TaskSubLabel.Text   = $"{pending.Count} פתוחות";
 
-            // Show up to 5 upcoming non-completed tasks
             var upcoming = pending
                 .OrderBy(t => t.ParsedDate)
                 .Take(5)
@@ -54,6 +53,7 @@ public partial class MainPage : ContentPage
         {
             var groups = await _groupSvc.GetMyGroupsAsync();
             GroupCountLabel.Text = $"{groups.Count} קבוצות";
+            GroupSubLabel.Text = groups.Count == 0 ? "זמן להצטרף לקבוצה" : "חברים ללמידה משותפת";
         }
         catch { /* silent */ }
     }

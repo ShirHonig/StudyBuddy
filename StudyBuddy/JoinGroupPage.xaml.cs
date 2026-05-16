@@ -70,10 +70,8 @@ public partial class JoinGroupPage : ContentPage
     {
         if (e.CurrentSelection.FirstOrDefault() is not GroupItem group) return;
 
-        // Clear selection so item can be tapped again
         GroupsCollection.SelectedItem = null;
 
-        // Navigate to details page
         await Navigation.PushAsync(new GroupDetailsPage(group));
     }
 

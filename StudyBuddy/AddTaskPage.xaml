@@ -3,16 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.AddTaskPage"
              Title="AddTaskPage"
-             BackgroundColor="#f3f0ff"
+             BackgroundColor="#f4f8fb"
              FlowDirection="RightToLeft"
              Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="Auto,*">
 
         <!-- ===== HEADER BAR ===== -->
-        <Grid Grid.Row="0" BackgroundColor="#9333ea" Padding="16,50,16,16"
+        <Grid Grid.Row="0" BackgroundColor="#0d3b66" Padding="16,50,16,16"
               ColumnDefinitions="Auto,*,Auto">
-            <Frame BackgroundColor="#7c22d4" CornerRadius="10"
+            <Frame BackgroundColor="#145281" CornerRadius="10"
                    WidthRequest="40" HeightRequest="40"
                    Padding="0" BorderColor="Transparent"
                    HasShadow="False" Grid.Column="0">
@@ -34,17 +34,17 @@
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Spacing="0" Padding="0">
 
-                <BoxView BackgroundColor="#9333ea" HeightRequest="30"/>
+                <BoxView BackgroundColor="#0d3b66" HeightRequest="30"/>
 
                 <VerticalStackLayout Spacing="16" Padding="20,0,20,30"
-                                     BackgroundColor="#f3f0ff">
+                                     BackgroundColor="#f4f8fb">
 
                     <!-- BREADCRUMB -->
                     <HorizontalStackLayout Spacing="6" HorizontalOptions="Center"
                                            Margin="0,10,0,0">
-                        <Label Text="דף הבית" FontSize="13" TextColor="#9333ea"/>
+                        <Label Text="דף הבית" FontSize="13" TextColor="#0d3b66"/>
                         <Label Text="‹" FontSize="13" TextColor="#9ca3af"/>
-                        <Label Text="משימות" FontSize="13" TextColor="#9333ea"/>
+                        <Label Text="משימות" FontSize="13" TextColor="#0d3b66"/>
                         <Label Text="‹" FontSize="13" TextColor="#9ca3af"/>
                         <Label x:Name="BreadcrumbLastLabel"
                                Text="הוספת משימה חדשה" FontSize="13" TextColor="#6b7280"/>
@@ -54,14 +54,14 @@
                     <Label x:Name="PageTitleLabel"
                            Text="הוספת משימה חדשה"
                            FontSize="24" FontAttributes="Bold"
-                           TextColor="#1e1b4b" HorizontalOptions="Center"/>
+                           TextColor="#0d3b66" HorizontalOptions="Center"/>
                     <Label x:Name="PageSubtitleLabel"
                            Text="מלא את הפרטים הבאים כדי להוסיף משימה לרשימת המשימות שלך"
-                           FontSize="14" TextColor="#6b7280"
+                           FontSize="14" TextColor="#52606d"
                            HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
 
                     <!-- SECTION HEADER -->
-                    <Frame BackgroundColor="#9333ea" CornerRadius="12"
+                    <Frame BackgroundColor="#0d3b66" CornerRadius="12"
                            Padding="14,10" BorderColor="Transparent"
                            HasShadow="False" Margin="0,6,0,0">
                         <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
@@ -88,7 +88,7 @@
                                 <HorizontalStackLayout Spacing="6">
                                     <Label Text="✏️" FontSize="14"/>
                                     <Label Text="כותרת המשימה" FontSize="15"
-                                           FontAttributes="Bold" TextColor="#1e1b4b"/>
+                                           FontAttributes="Bold" TextColor="#0d3b66"/>
                                 </HorizontalStackLayout>
                                 <Frame BackgroundColor="#fafafa" CornerRadius="10"
                                        Padding="0" BorderColor="#e5e7eb"
@@ -96,7 +96,7 @@
                                     <Entry x:Name="TitleEntry"
                                            Placeholder="הזן כותרת למשימה..."
                                            FontSize="16" BackgroundColor="Transparent"
-                                           PlaceholderColor="#9ca3af" TextColor="#1e1b4b"
+                                           PlaceholderColor="#9ca3af" TextColor="#0d3b66"
                                            HorizontalTextAlignment="Start"
                                            Margin="14,0"/>
                                 </Frame>
@@ -107,14 +107,14 @@
                                 <HorizontalStackLayout Spacing="6">
                                     <Label Text="📁" FontSize="14"/>
                                     <Label Text="קטגוריה" FontSize="15"
-                                           FontAttributes="Bold" TextColor="#1e1b4b"/>
+                                           FontAttributes="Bold" TextColor="#0d3b66"/>
                                 </HorizontalStackLayout>
                                 <Frame BackgroundColor="#fafafa" CornerRadius="10"
                                        Padding="0" BorderColor="#e5e7eb"
                                        HasShadow="False">
                                     <Picker x:Name="CategoryPicker"
                                             Title="בחר קטגוריה..."
-                                            FontSize="16" TextColor="#1e1b4b"
+                                            FontSize="16" TextColor="#0d3b66"
                                             TitleColor="#9ca3af"
                                             Margin="10,0">
                                         <Picker.ItemsSource>
@@ -137,15 +137,14 @@
                                 <HorizontalStackLayout Spacing="6">
                                     <Label Text="📅" FontSize="14"/>
                                     <Label Text="תאריך יעד" FontSize="15"
-                                           FontAttributes="Bold" TextColor="#1e1b4b"/>
+                                           FontAttributes="Bold" TextColor="#0d3b66"/>
                                 </HorizontalStackLayout>
                                 <Frame BackgroundColor="#fafafa" CornerRadius="10"
                                        Padding="0" BorderColor="#e5e7eb"
                                        HasShadow="False" HeightRequest="48">
                                     <DatePicker x:Name="DueDatePicker"
                                                 Format="dd/MM/yyyy"
-                                                FontSize="16" TextColor="#1e1b4b"
-                                                MinimumDate="01/01/2026"
+                                                FontSize="16" TextColor="#0d3b66"
                                                 Margin="10,0"
                                                 DateSelected="OnDateSelected"
                                                 VerticalOptions="Center"/>
@@ -163,7 +162,7 @@
                                 <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
                                     <Label Text="⚠️" FontSize="14" VerticalOptions="Center"/>
                                     <Label Text="רמת עדיפות:" FontSize="14"
-                                           TextColor="#1e1b4b" VerticalOptions="Center"/>
+                                           TextColor="#0d3b66" VerticalOptions="Center"/>
                                     <Label x:Name="AutoPriorityLabel"
                                            FontSize="15" FontAttributes="Bold"
                                            VerticalOptions="Center"/>
@@ -178,7 +177,7 @@
                                 <HorizontalStackLayout Spacing="6">
                                     <Label Text="⚠️" FontSize="14"/>
                                     <Label Text="שנה רמת עדיפות" FontSize="15"
-                                           FontAttributes="Bold" TextColor="#1e1b4b"/>
+                                           FontAttributes="Bold" TextColor="#0d3b66"/>
                                 </HorizontalStackLayout>
                                 <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
                                     <!-- High -->
@@ -240,25 +239,7 @@
                                 </Grid>
                             </VerticalStackLayout>
 
-                            <!-- DESCRIPTION FIELD -->
-                            <VerticalStackLayout Spacing="6">
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label Text="📝" FontSize="14"/>
-                                    <Label Text="תיאור המשימה" FontSize="15"
-                                           FontAttributes="Bold" TextColor="#1e1b4b"/>
-                                </HorizontalStackLayout>
-                                <Frame BackgroundColor="#fafafa" CornerRadius="10"
-                                       Padding="0" BorderColor="#e5e7eb"
-                                       HasShadow="False" HeightRequest="100">
-                                    <Editor x:Name="DescriptionEditor"
-                                            Placeholder="הוסף תיאור מפורט למשימה..."
-                                            FontSize="15" BackgroundColor="Transparent"
-                                            PlaceholderColor="#9ca3af" TextColor="#1e1b4b"
-                                            AutoSize="TextChanges"
-                                            Margin="10,6"/>
-                                </Frame>
-                            </VerticalStackLayout>
-
+                            
                         </VerticalStackLayout>
                     </Frame>
 
@@ -266,7 +247,7 @@
                     <Button x:Name="SubmitButton"
                             Text="＋  הוסף משימה"
                             FontSize="18" FontAttributes="Bold"
-                            BackgroundColor="#9333ea" TextColor="White"
+                            BackgroundColor="#0d3b66" TextColor="White"
                             CornerRadius="12" HeightRequest="55"
                             Clicked="OnSubmitClicked"
                             Margin="0,6,0,0">

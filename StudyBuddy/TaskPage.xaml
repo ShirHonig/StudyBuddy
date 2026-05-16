@@ -16,7 +16,7 @@
                 <Label Text="א" TextColor="#27378a" FontAttributes="Bold" FontSize="14"
                        HorizontalOptions="Center" VerticalOptions="Center"/>
             </Frame>
-            <Label Grid.Column="1" Text="StudyBuddy"
+            <Label Grid.Column="1" Text="Study Buddy"
                    FontSize="20" FontAttributes="Bold" TextColor="#0040a1"
                    HorizontalOptions="Center" VerticalOptions="Center"/>
             <Label Grid.Column="2" Text="🔔" FontSize="20"
@@ -41,8 +41,8 @@
                 </VerticalStackLayout>
 
                 <!-- Add Task Button -->
-                <Button Text="＋  הוספת משימה חדשה"
-                        BackgroundColor="#0040a1" TextColor="White"
+                <Button Text="הוספת משימה חדשה"
+                        BackgroundColor="#0d3b66" TextColor="White"
                         CornerRadius="14" HeightRequest="52"
                         FontSize="16" FontAttributes="Bold"
                         Margin="0,0,0,24"
@@ -70,35 +70,35 @@
                                 <TapGestureRecognizer Tapped="OnStatTotalTapped"/>
                             </Frame.GestureRecognizers>
                             <VerticalStackLayout Spacing="2">
-                                <Label Text="סה״כ" FontSize="12" TextColor="#b2c5ff"/>
+                            <Label Text="סה״כ" FontSize="12" TextColor="#dbeafe"/>
                                 <Label x:Name="TotalCountLabel" Text="0"
                                        FontSize="26" FontAttributes="Bold" TextColor="White"/>
                             </VerticalStackLayout>
                         </Frame>
 
                         <Frame x:Name="StatInProgressFrame"
-                               BackgroundColor="#2563eb" CornerRadius="14"
+                               BackgroundColor="#1d6f8c" CornerRadius="14"
                                WidthRequest="110" HeightRequest="76"
                                Padding="12" BorderColor="Transparent" HasShadow="True">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnStatInProgressTapped"/>
                             </Frame.GestureRecognizers>
                             <VerticalStackLayout Spacing="2">
-                                <Label Text="בתהליך" FontSize="12" TextColor="#bfdbfe"/>
+                                <Label Text="בתהליך" FontSize="12" TextColor="#d7eef8"/>
                                 <Label x:Name="InProgressCountLabel" Text="0"
                                        FontSize="26" FontAttributes="Bold" TextColor="White"/>
                             </VerticalStackLayout>
                         </Frame>
 
                         <Frame x:Name="StatCompletedFrame"
-                               BackgroundColor="#16a34a" CornerRadius="14"
+                               BackgroundColor="#2a9d8f" CornerRadius="14"
                                WidthRequest="110" HeightRequest="76"
                                Padding="12" BorderColor="Transparent" HasShadow="True">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnStatCompletedTapped"/>
                             </Frame.GestureRecognizers>
                             <VerticalStackLayout Spacing="2">
-                                <Label Text="הושלם" FontSize="12" TextColor="#bbf7d0"/>
+                                <Label Text="הושלם" FontSize="12" TextColor="#d4f5ef"/>
                                 <Label x:Name="CompletedCountLabel" Text="0"
                                        FontSize="26" FontAttributes="Bold" TextColor="White"/>
                             </VerticalStackLayout>

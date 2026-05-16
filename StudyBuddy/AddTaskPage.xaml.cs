@@ -27,19 +27,14 @@ public partial class AddTaskPage : ContentPage
         "אנגלית", "פיזיקה", "ביולוגיה", "כללי"
     ];
 
-    /// <summary>
-    /// Constructor for adding a new task.
-    /// </summary>
     public AddTaskPage()
     {
         InitializeComponent();
         _isEditMode = false;
         DueDatePicker.Date = DateTime.Now;
+        UpdateAutoPriorityDisplay(TaskItem.CalculatePriorityFromDate(DueDatePicker.Date));
     }
 
-    /// <summary>
-    /// Constructor for editing an existing task.
-    /// </summary>
     public AddTaskPage(TaskItem taskToEdit) : this()
     {
         _isEditMode = true;
@@ -53,7 +48,6 @@ public partial class AddTaskPage : ContentPage
         SubmitButton.Text = "💾  שמור שינויים";
 
         TitleEntry.Text = taskToEdit.Title;
-        DescriptionEditor.Text = taskToEdit.Description;
 
         int catIndex = CategoryList.IndexOf(taskToEdit.Category);
         if (catIndex >= 0)
@@ -63,13 +57,9 @@ public partial class AddTaskPage : ContentPage
                 System.Globalization.DateTimeStyles.None, out DateTime parsed))
             DueDatePicker.Date = parsed;
 
-        // Show the existing priority
         UpdateAutoPriorityDisplay(taskToEdit.Priority);
     }
 
-    /// <summary>
-    /// Called when the user picks a date — auto-calculates priority.
-    /// </summary>
     private void OnDateSelected(object sender, DateChangedEventArgs e)
     {
         string autoPriority = TaskItem.CalculatePriorityFromDate(e.NewDate);
@@ -77,9 +67,6 @@ public partial class AddTaskPage : ContentPage
         PriorityPickerSection.IsVisible = false;
     }
 
-    /// <summary>
-    /// Shows the auto-calculated priority badge below the date.
-    /// </summary>
     private void UpdateAutoPriorityDisplay(string priority)
     {
         _selectedPriority = priority;
@@ -103,9 +90,6 @@ public partial class AddTaskPage : ContentPage
         }
     }
 
-    /// <summary>
-    /// Tap on the auto-priority badge → show/hide the priority picker.
-    /// </summary>
     private void OnAutoPriorityTapped(object sender, EventArgs e)
     {
         PriorityPickerSection.IsVisible = !PriorityPickerSection.IsVisible;
@@ -176,7 +160,6 @@ public partial class AddTaskPage : ContentPage
         SubmitButton.IsEnabled = false;
         SubmitButton.Text = "שומר...";
 
-        // Capture the main-thread SynchronizationContext before any await
         var uiContext = SynchronizationContext.Current;
 
         try
@@ -184,7 +167,7 @@ public partial class AddTaskPage : ContentPage
             if (_isEditMode && _editingTask is not null)
             {
                 _editingTask.Title = TitleEntry.Text.Trim();
-                _editingTask.Description = DescriptionEditor.Text?.Trim() ?? string.Empty;
+                _editingTask.Description = string.Empty;
                 _editingTask.Category = category;
                 _editingTask.CategoryColor = catColor ?? "#9333ea";
                 _editingTask.Date = DueDatePicker.Date.ToString("dd/MM/yyyy");
@@ -192,13 +175,14 @@ public partial class AddTaskPage : ContentPage
                 _editingTask.IsUrgent = _selectedPriority == "גבוהה";
 
                 await _taskService.UpdateTaskAsync(_editingTask);
+                MessagingCenter.Send(this, "TaskEdited", _editingTask);
             }
             else
             {
                 var newTask = new TaskItem
                 {
                     Title = TitleEntry.Text.Trim(),
-                    Description = DescriptionEditor.Text?.Trim() ?? string.Empty,
+                    Description = string.Empty,
                     Category = category,
                     CategoryColor = catColor ?? "#9333ea",
                     Date = DueDatePicker.Date.ToString("dd/MM/yyyy"),
@@ -208,7 +192,8 @@ public partial class AddTaskPage : ContentPage
                     Status = "בתהליך"
                 };
 
-                await _taskService.AddTaskAsync(newTask);
+                newTask.Id = await _taskService.AddTaskAsync(newTask);
+                MessagingCenter.Send(this, "TaskAdded", newTask);
             }
         }
         catch (Exception ex)
@@ -216,17 +201,18 @@ public partial class AddTaskPage : ContentPage
             System.Diagnostics.Debug.WriteLine($"[Firebase] Save failed: {ex}");
             await DisplayAlert("שגיאה", $"שמירה נכשלה:\n{ex.Message}", "אישור");
             SubmitButton.IsEnabled = true;
-            SubmitButton.Text = "＋  הוסף משימה";
+            SubmitButton.Text = _isEditMode ? "שמור שינויים" : "הוסף משימה";
             return;
         }
 
-        // Navigate back on the main thread regardless of which thread Firebase resumed on
         if (uiContext != null)
-            uiContext.Post(_ => Navigation.PopAsync(), null);
+        {
+            uiContext.Post(async _ => await Navigation.PopAsync(), null);
+        }
         else
+        {
             await Navigation.PopAsync();
-
-        await Navigation.PopAsync();
+        }
     }
 
     private async void OnCancelClicked(object sender, EventArgs e)

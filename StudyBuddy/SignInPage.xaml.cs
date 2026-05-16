@@ -24,7 +24,6 @@ public partial class SignInPage : ContentPage
         var password        = PasswordEntry.Text;
         var confirmPassword = ConfirmPasswordEntry.Text;
 
-        // ── Validation ────────────────────────────────────────────────────────
         if (string.IsNullOrWhiteSpace(fullName) ||
             string.IsNullOrWhiteSpace(email)    ||
             string.IsNullOrWhiteSpace(username) ||
@@ -46,20 +45,24 @@ public partial class SignInPage : ContentPage
             return;
         }
 
-        // ── Register ──────────────────────────────────────────────────────────
         RegisterButton.IsEnabled = false;
         RegisterButton.Text      = "יוצר חשבון...";
 
         try
         {
-            await Task.Run(() => _auth.RegisterAsync(email!, password, fullName!, username!));
+            await _auth.RegisterAsync(email!, password, fullName!, username!);
 
-            // Set MainPage as the new root
-            Application.Current!.MainPage = new NavigationPage(new MainPage());
+            if (Application.Current?.Windows.Count > 0)
+            {
+                Application.Current.Windows[0].Page = new NavigationPage(new MainPage());
+            }
         }
         catch (Exception ex)
         {
             await DisplayAlert("שגיאה", ex.Message, "אישור");
+        }
+        finally
+        {
             RegisterButton.IsEnabled = true;
             RegisterButton.Text      = "צור חשבון";
         }

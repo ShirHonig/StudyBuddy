@@ -9,7 +9,6 @@ public partial class CreateGroupPage : ContentPage
     private Frame?  _activeSubjectFrame;
     private Frame?  _activeColorFrame;
 
-    // All subject frames paired with their accent colors for bulk-reset
     private (Frame frame, string color)[] _subjectFrames = [];
 
     public CreateGroupPage()
@@ -34,11 +33,8 @@ public partial class CreateGroupPage : ContentPage
         ];
     }
 
-    // ── Subject selection ─────────────────────────────────────────────────────
-
     private void OnSubjectTapped(object sender, TappedEventArgs e)
     {
-        // Reset previous selection
         if (_activeSubjectFrame is not null)
             _activeSubjectFrame.BackgroundColor = Colors.White;
 
@@ -49,19 +45,14 @@ public partial class CreateGroupPage : ContentPage
         _selectedSubject = parts.Length > 0 ? parts[0] : "";
         _selectedColor   = parts.Length > 1 ? parts[1] : "#737785";
 
-        // Highlight selected with tinted background
         tapped.BackgroundColor = Color.FromArgb(_selectedColor).WithAlpha(0.13f);
         _activeSubjectFrame = tapped;
 
-        // Show color picker only for "אחר"
         ColorPickerSection.IsVisible = _selectedSubject == "אחר";
     }
 
-    // ── Color picker (for "אחר") ──────────────────────────────────────────────
-
     private void OnColorTapped(object sender, TappedEventArgs e)
     {
-        // Reset border on previous color circle
         if (_activeColorFrame is not null)
             _activeColorFrame.BorderColor = Colors.Transparent;
 
@@ -72,8 +63,6 @@ public partial class CreateGroupPage : ContentPage
         colorFrame.Padding     = new Thickness(3);
         _activeColorFrame      = colorFrame;
     }
-
-    // ── Create ────────────────────────────────────────────────────────────────
 
     private async void OnCreateClicked(object sender, EventArgs e)
     {
@@ -133,8 +122,6 @@ public partial class CreateGroupPage : ContentPage
             CreateButton.Text      = "＋  צור קבוצה חדשה";
         }
     }
-
-    // ── Navigation ────────────────────────────────────────────────────────────
 
     private async void OnBackTapped(object sender, EventArgs e)  => await Navigation.PopAsync();
     private async void OnHomeNavTapped(object sender, EventArgs e) => await Navigation.PopToRootAsync();

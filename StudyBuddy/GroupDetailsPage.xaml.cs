@@ -19,26 +19,21 @@ public partial class GroupDetailsPage : ContentPage
 
     private void PopulateUI()
     {
-        // Subject with accent colors
         SubjectLabel.Text = _group.Subject;
         SubjectAccent.BackgroundColor = _group.SubjectColor;
         SubjectChip.BackgroundColor = _group.SubjectColor.WithAlpha(0.25f);
         SubjectLabel.TextColor = _group.SubjectColor;
 
-        // Title
         TitleLabel.Text = _group.Title;
 
-        // Meeting Date
         MeetingDateLabel.Text = _group.NextMeeting.ToString("dd/MM/yyyy HH:mm");
 
-        // Owner
         OwnerNameLabel.Text = _group.CreatorName;
         OwnerEmailLabel.Text = _group.CreatorEmail;
         OwnerInitialLabel.Text = _group.CreatorInitial;
         OwnerAvatar.BackgroundColor = _group.AvatarBg;
         OwnerInitialLabel.TextColor = _group.AvatarFg;
 
-        // Members (exclude owner to avoid duplication)
         _members.Clear();
         foreach (var m in _group.MembersList.Where(m => m.Uid != _group.CreatorUid))
         {
@@ -49,7 +44,6 @@ public partial class GroupDetailsPage : ContentPage
 
         MemberCountLabel.Text = $"({_group.MembersList.Count})";
 
-        // Join button visibility
         var isMember = _group.MembersList.Any(m => m.Uid == Services.UserSession.Uid);
         JoinButtonContainer.IsVisible = !isMember;
         MemberBadge.IsVisible = isMember;
@@ -64,7 +58,6 @@ public partial class GroupDetailsPage : ContentPage
         {
             await _svc.JoinGroupAsync(_group);
 
-            // Add to local list
             var newMember = new MemberInfo
             {
                 Uid   = Services.UserSession.Uid,
@@ -76,13 +69,10 @@ public partial class GroupDetailsPage : ContentPage
             _group.MembersList.Add(newMember);
             _members.Add(newMember);
 
-            // Add to calendar
             await AddMeetingToCalendarAsync();
 
-            // Notify other pages
             MessagingCenter.Send(this, "GroupJoined", _group);
 
-            // Update UI
             JoinButtonContainer.IsVisible = false;
             MemberBadge.IsVisible = true;
             MemberCountLabel.Text = $"({_group.MembersList.Count})";

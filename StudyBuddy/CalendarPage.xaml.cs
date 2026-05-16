@@ -34,7 +34,6 @@ public partial class CalendarPage : ContentPage
         int daysInMonth = DateTime.DaysInMonth(_currentMonth.Year, _currentMonth.Month);
         var firstDay = new DateTime(_currentMonth.Year, _currentMonth.Month, 1);
 
-        // Hebrew calendar: Sunday=0 is rightmost (column 6), Saturday=6 is leftmost (column 0)
         int startColumn = 6 - (int)firstDay.DayOfWeek;
 
         int row = 0;
@@ -124,7 +123,6 @@ public partial class CalendarPage : ContentPage
 
         try
         {
-            // Load tasks
             var tasks = await _taskSvc.GetTasksAsync();
             var pendingTasks = tasks.Where(t => !t.IsCompleted && t.ParsedDate >= today)
                                     .OrderBy(t => t.ParsedDate);
@@ -144,7 +142,6 @@ public partial class CalendarPage : ContentPage
                 });
             }
 
-            // Count tasks this week
             var tasksThisWeek = pendingTasks.Count(t => t.ParsedDate <= weekEnd);
             TasksCountLabel.Text = tasksThisWeek.ToString();
         }
@@ -152,7 +149,6 @@ public partial class CalendarPage : ContentPage
 
         try
         {
-            // Load group meetings
             var groups = await _groupSvc.GetMyGroupsAsync();
             var upcomingMeetings = groups.Where(g => g.NextMeeting >= today)
                                          .OrderBy(g => g.NextMeeting);
@@ -173,13 +169,11 @@ public partial class CalendarPage : ContentPage
                 });
             }
 
-            // Count meetings this week
             var meetingsThisWeek = upcomingMeetings.Count(g => g.NextMeeting <= weekEnd);
             MeetingsCountLabel.Text = meetingsThisWeek.ToString();
         }
         catch { /* silent */ }
 
-        // Group events by date
         _groupedEvents.Clear();
 
         var grouped = allEvents

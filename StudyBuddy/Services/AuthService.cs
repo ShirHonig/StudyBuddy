@@ -12,8 +12,6 @@ public class AuthService
     private static readonly HttpClient Http = new();
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.General);
 
-    // ── Register ─────────────────────────────────────────────────────────────
-
     public async Task RegisterAsync(string email, string password, string fullName, string username)
     {
         var body = new { email, password, returnSecureToken = true };
@@ -30,18 +28,14 @@ public class AuthService
         using var doc = JsonDocument.Parse(json);
         var root = doc.RootElement;
 
-        // Store session
         UserSession.Uid      = root.GetProperty("localId").GetString() ?? "default-user";
         UserSession.IdToken  = root.GetProperty("idToken").GetString() ?? string.Empty;
         UserSession.Email    = email;
         UserSession.FullName = fullName;
         UserSession.Username = username;
 
-        // Save profile to Firestore
         await SaveProfileAsync(fullName, username, email);
     }
-
-    // ── Login ─────────────────────────────────────────────────────────────────
 
     public async Task LoginAsync(string email, string password)
     {
@@ -62,9 +56,9 @@ public class AuthService
         UserSession.Uid     = root.GetProperty("localId").GetString() ?? "default-user";
         UserSession.IdToken = root.GetProperty("idToken").GetString() ?? string.Empty;
         UserSession.Email   = email;
-    }
 
-    // ── Save user profile to Firestore ────────────────────────────────────────
+        await LoadProfileAsync();
+    }
 
     private static async Task SaveProfileAsync(string fullName, string username, string email)
     {
@@ -86,7 +80,38 @@ public class AuthService
         System.Diagnostics.Debug.WriteLine($"[Auth] Profile save status={response.StatusCode}");
     }
 
-    // ── Error helper ──────────────────────────────────────────────────────────
+    private static async Task LoadProfileAsync()
+    {
+        var projectId = "studdybuddy-app522";
+        var url = $"https://firestore.googleapis.com/v1/projects/{projectId}/databases/(default)/documents/users/{UserSession.Uid}?key={ApiKey}";
+
+        var response = await Http.GetAsync(url);
+        var json = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            System.Diagnostics.Debug.WriteLine($"[Auth] Profile load status={response.StatusCode} body={json}");
+            return;
+        }
+
+        using var doc = JsonDocument.Parse(json);
+        if (!doc.RootElement.TryGetProperty("fields", out var fields))
+            return;
+
+        UserSession.FullName = GetString(fields, "FullName") ?? string.Empty;
+        UserSession.Username = GetString(fields, "Username") ?? string.Empty;
+        UserSession.Email = GetString(fields, "Email") ?? UserSession.Email;
+    }
+
+    private static string? GetString(JsonElement fields, string key)
+    {
+        if (fields.TryGetProperty(key, out var property) &&
+            property.TryGetProperty("stringValue", out var value))
+        {
+            return value.GetString();
+        }
+
+        return null;
+    }
 
     private static string ParseFirebaseError(string json)
     {

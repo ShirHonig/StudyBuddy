@@ -24,7 +24,7 @@ public partial class GroupsPage : ContentPage
             RefreshMyGroups();
         });
 
-        MessagingCenter.Subscribe<JoinGroupPage, GroupItem>(this, "GroupJoined", (_, g) =>
+        MessagingCenter.Subscribe<SearchGroupPage, GroupItem>(this, "GroupJoined", (_, g) =>
         {
             if (_allGroups.All(x => x.Id != g.Id))
                 _allGroups.Add(g);
@@ -132,7 +132,7 @@ public partial class GroupsPage : ContentPage
 
     private async void OnJoinGroupClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new JoinGroupPage());
+        await Navigation.PushAsync(new SearchGroupPage());
     }
 
     private void OnChipClicked(object sender, EventArgs e)

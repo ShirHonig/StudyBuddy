@@ -3,13 +3,13 @@ using StudyBuddy.Models;
 
 namespace StudyBuddy;
 
-public partial class JoinGroupPage : ContentPage
+public partial class SearchGroupPage : ContentPage
 {
     private readonly Services.GroupFirestoreService _svc = new();
     private readonly List<GroupItem> _allGroups = [];
     private readonly ObservableCollection<GroupItem> _displayed = [];
 
-    public JoinGroupPage()
+    public SearchGroupPage()
     {
         InitializeComponent();
         GroupsCollection.ItemsSource = _displayed;
